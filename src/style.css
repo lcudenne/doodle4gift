@@ -1,0 +1,236 @@
+
+body{
+    background-color:rgba(232, 232, 232, 0.9);
+}
+
+a:link, a:visited {text-decoration: none; color: #444444;}
+a:hover {text-decoration: none; color: #AAAAAA;}
+
+
+img{
+    margin: 8px;
+    opacity:0.7;
+    border:none;
+}
+
+img:hover{
+    opacity:1;
+    border:none;
+}
+
+
+.headerbar{
+    display: inline-block;
+    background-color:rgba(255, 255, 255, 0.9);
+    border: 1px solid;
+    border-color: rgba(232, 232, 232, 0.9);
+    border-radius:8px;
+    box-shadow: 10px 10px 5px rgba(0,0,0,0.5);
+}
+
+.homebutton{
+    float: left;
+}
+
+.homeimg{
+    height: 64px;
+    width:  64px;
+}
+
+.login{
+    margin: 18px;
+    font-family:"Verdana";
+    font-size:12px;
+    border: 1px solid;
+    border-color: rgba(232, 232, 232, 0.9);
+}
+
+.newprofile{
+    margin: 18px;
+    font-family:"Verdana";
+    font-size:12px;
+    border: 1px solid;
+    border-color: rgba(232, 232, 232, 0.9);
+}
+
+
+.logout{
+    margin: 8px;
+    float: right;
+    font-family:"Verdana";
+    font-size:14px;
+}
+
+
+.elementlistcenter{
+    width: 100%;
+    margin: 18px;
+    text-align: center;
+}
+
+.elementlist{
+    max-width:1024px;
+    overflow:auto;
+    display: inline-block;
+    background-color:rgba(255, 255, 255, 0.9);
+    border: 0px solid;
+    border-color: rgba(232, 232, 232, 0.9);
+    border-radius:8px;
+    box-shadow: 10px 10px 5px rgba(0,0,0,0.5);
+}
+
+.element{
+    text-align: center;
+    margin-right: 12px;
+    width:  132px;
+    float: left;
+
+}
+
+.smallelement{
+    text-align: center;
+    margin-right: 12px;
+    width:  66px;
+    float: left;
+}
+
+.elementimg{
+    text-align: center;
+    width:128px;
+    height:128px;
+    border-bottom-left-radius:8px;
+    border-top-right-radius:8px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+}
+
+.smallelementimg{
+    float: left;
+    text-align: center;
+    width:64px;
+    height:64px;
+    border-bottom-left-radius:8px;
+    border-top-right-radius:8px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+}
+
+
+.elementname{
+    font-family:"Verdana";
+    font-size:12px;
+    text-align:center;
+    word-wrap: break-word;
+}
+
+.elementprice{
+    font-family:"Verdana";
+    font-size:12px;
+    text-align:center;
+    word-wrap: break-word;
+}
+
+.elementleft{
+    border: 0px solid;
+    float:left;
+}
+.elementright{
+    border: 0px solid;
+    float:right;
+}
+
+
+.inputclass{
+    width: 82px;
+}
+
+.percentbar {
+    margin: 8px;
+    background:#CCCCCC;
+    border:1px solid #666666;
+    height:20px;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+}
+
+.percentbaramount { background: #28B8C0; height: 20px; }
+.percentbarpaid { background: #28FFC0; height: 20px; }
+
+
+
+.tabledescription{
+    width: 320px;
+
+}
+
+.wish{
+    max-width:768px;
+    overflow:auto;
+    border:1px solid #777777;
+    border-radius: 4px;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    margin: 12px;
+}
+
+.wishdescription{
+    margin: 12px;
+}
+
+.leftdescription{
+    font-family:"Verdana";
+    font-size:12px;
+    vertical-align:top;
+    text-align: left;
+}
+
+.rightdescription{
+    font-family:"Verdana";
+    font-size:12px;
+    vertical-align:top;
+    text-align: left;
+}
+
+.paid{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    width: 78px;
+    height: 22px;
+    border:1px solid #888888;
+    border-radius: 4px;
+    background-color: #AAFFCC;
+}
+
+
+.leader{
+    display: inline-block;
+    border:1px solid #777777;
+    border-radius: 4px;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    margin: 12px;
+    background-color: #F2F2F2;
+}
+
+.message{
+    display: inline-block;
+    font-family:"Verdana";
+    font-size:12px;
+    vertical-align:top;
+    text-align: center;
+    background-color: #AAFFCC;
+    border:1px solid #888888;
+    border-radius: 4px;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+}
+
+.footer{
+    position:fixed;
+    bottom:12px;
+    left:12px;
+    font-family:"Verdana";
+    font-size:12px;
+    display:inline-block;
+    background-color: #AAFFCC;
+    border:1px solid #888888;
+    border-radius: 4px;
+    height: 20px;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    z-index:0;
+}
