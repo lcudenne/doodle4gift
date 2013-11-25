@@ -130,6 +130,16 @@ Create account<br /><br />\n
    <td><input type=\"radio\" name=\"_d4g_avatar\" value=\"astronaut\" />\n</td>
    <td><input type=\"radio\" name=\"_d4g_avatar\" value=\"sportsman\" />\n</td>
    <td><input type=\"radio\" name=\"_d4g_avatar\" value=\"robotess\" />\n</td>
+  </tr><tr>
+   <td><img class=\"smallelementimg\" src=\"img/avatar_aphrodite\" /></td>
+   <td><img class=\"smallelementimg\" src=\"img/avatar_contractor\" /></td>
+   <td><img class=\"smallelementimg\" src=\"img/avatar_ninja\" /></td>
+   <td><img class=\"smallelementimg\" src=\"img/avatar_teacher\" /></td>
+  </tr><tr>
+   <td><input type=\"radio\" name=\"_d4g_avatar\" value=\"aphrodite\" />\n</td>
+   <td><input type=\"radio\" name=\"_d4g_avatar\" value=\"contractor\" />\n</td>
+   <td><input type=\"radio\" name=\"_d4g_avatar\" value=\"ninja\" />\n</td>
+   <td><input type=\"radio\" name=\"_d4g_avatar\" value=\"teacher\" />\n</td>
   </tr></table>
 
   </td></tr></table>\n
