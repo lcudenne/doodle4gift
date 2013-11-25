@@ -23,7 +23,7 @@
 
 
 $SCRIPTNAME = "index.php5";
-$SCRIPTVERSION = "Tue, 12 Nov 2013 10:42:00 +0100";
+$SCRIPTVERSION = "Mon, 25 Nov 2013 10:42:00 +0100";
 $DEBUG = FALSE;
 
 $DATAPATH = "data/";

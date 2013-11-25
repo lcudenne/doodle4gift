@@ -196,11 +196,21 @@ function actionNewProfile($doodle4gift, $profiles) {
   }
 
   if ($profile) {
+
     $attrs = $profile->attributes();
     $password = $attrs["password"];
-    echo "<div class=\"message\">Profile" . $name . " " . $email 
+    echo "<div class=\"message\">Profile " . $name 
       . " created.<br />\n Please use the following password to authenticate, or use this private link: <a href=\"" . $SCRIPTNAME . "?action=login&amp;password="
       . $password . "\">" . $password . "</a></div>\n";
+    
+    if ($email) {
+      $subject = "Welcome to Doodle4Gift!";
+      $msg = "Dear " . $name . ",\n\nThank you for joining this Doodle4Gift.\nYou can access your private profile by authenticating with the following password: " . $password . "\n\nOr by clicking on the following link:\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "?action=login&password=" . $password . "\n\nRegards,\nDoodle4Gift.\n";
+      $headers = "From: Doodle4Gift <noreply@" . $_SERVER["SERVER_NAME"] . ">"."\r\n";
+      mail($email, $subject, $msg, $headers);
+      echo "<div class=\"message\">A confirmation email has been sent to " . $email . "</div>\n";
+    }
+
   } else {
     echo "<div class=\"message\">Could not create profile " . $name . " " . $email  . "</div>\n";
   }
