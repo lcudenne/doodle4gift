@@ -106,6 +106,7 @@ Authenticate<br /><br />\n
   Password <input type=\"password\" name=\"_d4g_password\" size=\"15\" required />\n
            <input class=\"inputclass\" type=\"submit\" value=\"Login\" />\n
  </form>\n
+ <br/><p title=\"Fill in your e-mail address below and click Create! Your password will be sent again.\">Have you lost your password?</p>
 </div>\n
 <div class=\"newprofile\" >\n
 Create account<br /><br />\n

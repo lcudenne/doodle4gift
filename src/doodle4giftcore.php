@@ -23,7 +23,7 @@
 
 
 $SCRIPTNAME = "index.php5";
-$SCRIPTVERSION = "Mon, 25 Nov 2013 10:42:00 +0100";
+$SCRIPTVERSION = "Tue, 26 Nov 2013 10:42:00 +0100";
 $DEBUG = FALSE;
 
 $DATAPATH = "data/";
@@ -459,7 +459,21 @@ function newProfile($profiles, $name, $email, $avatar) {
   }
 
 
-  if (!$present) {
+  if ($present) {
+
+    $attrs = $present->attributes();
+    $pname = $attrs["name"];
+    $password = $attrs["password"];
+
+    if ($email) {
+      $subject = "Doodle4Gift password recovery";
+      $msg = "Dear " . $pname . ",\n\nYou can access your private profile by authenticating with the following password: " . $password . "\n\nOr by clicking on the following link:\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "?action=login&password=" . $password . "\n\nRegards,\nDoodle4Gift.\n";
+      $headers = "From: Doodle4Gift <noreply@" . $_SERVER["SERVER_NAME"] . ">"."\r\n";
+      mail($email, $subject, $msg, $headers);
+      echo "<div class=\"message\">Your password has been sent to " . $email . "</div>\n";
+    }
+
+  } else {
     $id = uniqid();
     $password = uniqid();
     $profile = $profiles->addChild("profile");
