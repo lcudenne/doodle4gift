@@ -132,6 +132,20 @@ function displayGifts($gifts) {
 
 }
 
+/* ------------------------------------------------------------------------------------ */
+function displaySelectGifts($gifts) {
+
+  print "<select class=\"fieldclass\" name=\"_d4g_giftid\" >\n";
+  foreach($gifts->children() as $gift) {
+    $attrs = $gift->attributes();
+    print " <option value=\"" . $attrs["id"] . "\">" . $attrs["name"]
+      . " (Price: " . $attrs["price"] . ")</option>\n";
+  }
+  print "</select>\n";
+
+}
+
+
 
 
 /* ------------------------------------------------------------------------------------ */
@@ -144,8 +158,17 @@ function displayProfilesGifts($login, $profiles, $gifts) {
 
 }
 
+
 /* ------------------------------------------------------------------------------------ */
 function displayProfileWishlist($login, $profile, $profiles, $gifts) {
+
+  displayProfileWishlistCore($login, $profile, $profiles, $gifts, NULL);
+
+}
+
+
+/* ------------------------------------------------------------------------------------ */
+function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $giftid) {
   global $SCRIPTNAME;
 
   if ($login && $profile) {
@@ -170,6 +193,11 @@ function displayProfileWishlist($login, $profile, $profiles, $gifts) {
              <table><tr><td class=\"leftdescription\">\n";
 
       $gift = getGift($gifts, $wishattrs["gift"]);
+
+      if ($gift == NULL) {
+	exit("Cannot retrieve Gift " . $wishattrs["gift"]);
+      }
+
       $giftattrs = $gift->attributes();
 
       $leader = FALSE;
@@ -189,14 +217,21 @@ function displayProfileWishlist($login, $profile, $profiles, $gifts) {
 
       if ($profile == $login) {
 
+	print "<table><tr><td>";
+	print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . $wishattrs["id"] . "\">\n
+              <input type=\"hidden\" name=\"_d4g_action\" value=\"editwish\" />\n
+              <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
+              <input type=\"hidden\" name=\"_d4g_wish\" value=\"".$wishattrs["id"]."\" />\n
+              <input class=\"inputclass\" type=\"submit\" value=\"Modify\" />\n
+             </form>\n";
+	print "</td><td>";
 	print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "\">\n
               <input type=\"hidden\" name=\"_d4g_action\" value=\"deletewish\" />\n
               <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
               <input type=\"hidden\" name=\"_d4g_wish\" value=\"".$wishattrs["id"]."\" />\n
               <input class=\"inputclass\" type=\"submit\" value=\"Delete\" />\n
              </form>\n";
-
-
+	print "</td></tr></table>";
 
       } else {
 
@@ -358,7 +393,7 @@ function displayProfileWishlist($login, $profile, $profiles, $gifts) {
 
     } /* for each wish */
 
-      print "<div class=\"wish\" >\n
+    print "<div class=\"wish\" >\n
              <table><tr><td class=\"leftdescription\">\n
              <img class=\"elementimg\" src=\"img/gift.png\" />\n
              </td><td>";
@@ -368,15 +403,37 @@ function displayProfileWishlist($login, $profile, $profiles, $gifts) {
             <input type=\"hidden\" name=\"_d4g_action\" value=\"addwish\" />\n
             <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
           <table class=\"tabledescription\"><tr><td class=\"leftdescription\">
-          Name (*)</td><td class=\"rightdescription\"><input type=\"text\" name=\"_d4g_giftname\" placeholder=\"required\" size=\"15\" required /></td></tr><tr><td class=\"leftdescription\">\n
+          Name (*)</td><td class=\"rightdescription\"><input class=\"fieldclass\" type=\"text\" name=\"_d4g_giftname\" placeholder=\"required\" size=\"15\" required /></td></tr><tr><td class=\"leftdescription\">\n
           Price (*)</td><td class=\"rightdescription\"><input type=\"number\" name=\"_d4g_giftprice\" size=\"3\" required /></td></tr><tr><td class=\"leftdescription\">\n
-          Description</td><td class=\"rightdescription\"> <textarea name=\"_d4g_giftdesc\" ></textarea></td></tr><tr><td class=\"leftdescription\">\n
-          Buy link</td><td class=\"rightdescription\"> <input type=\"url\" name=\"_d4g_giftlink\" /></td></tr><tr><td class=\"leftdescription\">\n
-          Image link</td><td class=\"rightdescription\"> <input type=\"url\" name=\"_d4g_giftimage\" /></td></tr><tr><td class=\"leftdescription\">\n
-          (*) Required</td><td class=\"rightdescription\"><input type=\"submit\" value=\"Create\" /></td></tr>
+          Description</td><td class=\"rightdescription\"> <textarea class=\"fieldclass\" name=\"_d4g_giftdesc\" ></textarea></td></tr><tr><td class=\"leftdescription\">\n
+          Buy link</td><td class=\"rightdescription\"> <input class=\"fieldclass\" type=\"url\" name=\"_d4g_giftlink\" /></td></tr><tr><td class=\"leftdescription\">\n
+          Image link</td><td class=\"rightdescription\"> <input class=\"fieldclass\" type=\"url\" name=\"_d4g_giftimage\" /></td></tr><tr><td class=\"leftdescription\">\n
+          (*) Required</td><td class=\"rightdescription\"><input class=\"inputclass\" type=\"submit\" value=\"Create\" /></td></tr>
           </table>
          </form>\n</div>"; /* wishdescription */
+
+    if (count($gifts->children()) > 0) {
     
+      echo "Or<br/>\n";
+
+      echo "<div class=\"wishdescription\">\n
+          <form method=\"POST\" action=\"" . $SCRIPTNAME . "\">\n
+            <input type=\"hidden\" name=\"_d4g_action\" value=\"addexistingwish\" />\n
+            <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
+          <table class=\"tabledescription\"><tr><td class=\"leftdescription\">
+          Choose from</td><td class=\"rightdescription\">\n";
+
+      displaySelectGifts($gifts);
+
+      echo "\n
+          </td></tr>
+          <tr><td class=\"leftdescription\">\n
+          </td><td class=\"rightdescription\"><input class=\"inputclass\" type=\"submit\" value=\"Choose\" /></td></tr>          
+          </table>
+         </form>\n</div>"; /* wishdescription */
+
+    }
+
     print "</td></tr></table>\n";
 
     print "</div>\n"; /* wish */

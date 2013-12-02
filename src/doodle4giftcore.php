@@ -23,7 +23,7 @@
 
 
 $SCRIPTNAME = "index.php5";
-$SCRIPTVERSION = "Tue, 26 Nov 2013 10:42:00 +0100";
+$SCRIPTVERSION = "Mon, 02 Dec 2013 10:42:00 +0100";
 $DEBUG = FALSE;
 
 $DATAPATH = "data/";
@@ -312,7 +312,7 @@ function getWish ($profile, $id) {
 }
 
 /* ------------------------------------------------------------------------------------ */
-function getWishByGift ($profile, $gift) {
+function getWishByGiftId ($profile, $gift) {
 
   $wish = FALSE;
   $wishlist = getWishlist ($profile);
@@ -345,6 +345,25 @@ function getWishSum ($wish, &$sum, &$paid) {
     }
   }
 
+}
+
+/* ------------------------------------------------------------------------------------ */
+function nbGiftWish ($profiles, $giftid) {
+
+  $nbwish = 0;
+  $wish = FALSE;
+
+  foreach($profiles->children() as $profile) {
+
+    $wish = getWishByGiftId($profile, $giftid);
+    
+    if ($wish) {
+      $nbwish++;
+    }
+
+  }
+
+  return $nbwish;
 }
 
 
@@ -467,7 +486,7 @@ function newProfile($profiles, $name, $email, $avatar) {
 
     if ($email) {
       $subject = "Doodle4Gift password recovery";
-      $msg = "Dear " . $pname . ",\n\nYou can access your private profile by authenticating with the following password: " . $password . "\n\nOr by clicking on the following link:\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "?action=login&password=" . $password . "\n\nRegards,\nDoodle4Gift.\n";
+      $msg = "Dear " . $pname . ",\n\nYou can access your private profile by authenticating with the following password: " . $password . "\n\nOr by clicking on the following link (do not share this link):\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "?action=login&password=" . $password . "\n\nIf you want to share this Doodle4Gift, please use:\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "\n\nRegards,\nDoodle4Gift.\n";
       $headers = "From: Doodle4Gift <noreply@" . $_SERVER["SERVER_NAME"] . ">"."\r\n";
       mail($email, $subject, $msg, $headers);
       echo "<div class=\"message\">Your password has been sent to " . $email . "</div>\n";
@@ -498,7 +517,7 @@ function newWish($profile, $gift) {
   $attrs = $gift->attributes();
   $giftid = $attrs["id"];
 
-  $present = getWishByGift($profile, $giftid);
+  $present = getWishByGiftId($profile, $giftid);
 
   if (!$present) {
     $wishlist = getWishlist($profile);
@@ -596,11 +615,22 @@ function deleteContributor($contributor) {
 }
 
 /* ------------------------------------------------------------------------------------ */
-function deleteWish($wish) {
+function deleteWish($profiles, $wish) {
+
+  $attrs = $wish->attributes();
+  $giftid = $attrs["gift"];
 
   if ($wish) {
     unset($wish[0]);
   }
+
+  $nbwish = nbGiftWish($profiles, $giftid);
+
+  /*
+  if ($nbwish == 0) {
+    unset($gift[0]);
+  }
+  */
 
 }
 

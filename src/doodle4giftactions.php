@@ -216,7 +216,7 @@ function actionNewProfile($doodle4gift, $profiles) {
     
     if ($email) {
       $subject = "Welcome to Doodle4Gift!";
-      $msg = "Dear " . $name . ",\n\nThank you for joining this Doodle4Gift.\nYou can access your private profile by authenticating with the following password: " . $password . "\n\nOr by clicking on the following link:\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "?action=login&password=" . $password . "\n\nRegards,\nDoodle4Gift.\n";
+      $msg = "Dear " . $name . ",\n\nThank you for joining this Doodle4Gift.\nYou can access your private profile by authenticating with the following password: " . $password . "\n\nOr by clicking on the following link (do not share this link):\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "?action=login&password=" . $password . "\n\nIf you want to share this Doodle4Gift, please use:\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "\n\nRegards,\nDoodle4Gift.\n";
       $headers = "From: Doodle4Gift <noreply@" . $_SERVER["SERVER_NAME"] . ">"."\r\n";
       mail($email, $subject, $msg, $headers);
       echo "<div class=\"message\">A confirmation email has been sent to " . $email . "</div>\n";
@@ -413,11 +413,33 @@ function actionAddWish($doodle4gift, $gifts, $profile) {
 }
 
 /* ------------------------------------------------------------------------------------ */
-function actionDeleteWish($doodle4gift, $wish) {
+function actionAddExistingWish($doodle4gift, $gifts, $profile) {
+
+  $gift = FALSE;
+  $wish = FALSE;
+
+  if (isset($_POST["_d4g_giftid"]) && !empty($_POST["_d4g_giftid"])) {
+
+    $gift = getGift($gifts, $_POST["_d4g_giftid"]);
+
+    if ($gift) {
+      $wish = newWish($profile, $gift);
+    }
+
+    if ($wish) {
+      saveXmlDataFile($doodle4gift);
+    }
+
+  }
+
+}
+
+/* ------------------------------------------------------------------------------------ */
+function actionDeleteWish($doodle4gift, $profiles, $wish) {
 
   if ($wish) {
 
-    deleteWish($wish);
+    deleteWish($profiles, $wish);
     
     saveXmlDataFile($doodle4gift);
 
@@ -537,11 +559,25 @@ function performAction($doodle4gift, $profiles, $gifts) {
       actionAddWish($doodle4gift, $gifts, $profile);
       displayProfileWishlist($login, $profile, $profiles, $gifts);
       break;
+    case "addexistingwish":
+      $profile = actionRetrieveProfile($profiles);
+      actionAddExistingWish($doodle4gift, $gifts, $profile);
+      displayProfileWishlist($login, $profile, $profiles, $gifts);
+      break;
+    case "editwish":
+      $profile = actionRetrieveProfile($profiles);
+      if ($profile == $login) {
+	$wish = actionRetrieveWish($profile);
+	displayProfileWishlistCore($login, $profile, $profiles, $gifts, $wish);
+      } else {
+	displayProfileWishlist($login, $profile, $profiles, $gifts);
+      }
+      break;
     case "deletewish":
       $profile = actionRetrieveProfile($profiles);
       if ($profile == $login) {
 	$wish = actionRetrieveWish($profile);
-	actionDeleteWish($doodle4gift, $wish);
+	actionDeleteWish($doodle4gift, $profiles, $wish);
       }
       displayProfileWishlist($login, $profile, $profiles, $gifts);
       break;

@@ -13,6 +13,11 @@ img{
     border:none;
 }
 
+td{
+    font-family:"Verdana";
+    font-size:12px;
+}
+
 img:hover{
     opacity:1;
     border:none;
@@ -142,6 +147,10 @@ img:hover{
     width: 82px;
 }
 
+.fieldclass{
+    width: 256px;
+}
+
 .percentbar {
     margin: 8px;
     background:#CCCCCC;
@@ -156,6 +165,9 @@ img:hover{
 
 
 .tabledescription{
+    border: 1px solid;
+    border-color: rgba(232, 232, 232, 0.9);
+
     width: 320px;
 
 }
@@ -170,6 +182,7 @@ img:hover{
 }
 
 .wishdescription{
+
     margin: 12px;
 }
 
