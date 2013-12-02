@@ -435,6 +435,49 @@ function actionAddExistingWish($doodle4gift, $gifts, $profile) {
 }
 
 /* ------------------------------------------------------------------------------------ */
+function actionModifyWish($doodle4gift, $gifts, $wish) {
+
+  if ($wish) {
+
+    $attrs = $wish->attributes();
+    $gift = getGift($gifts, $attrs["gift"]);
+
+    if (isset($_POST["_d4g_giftname"]) && !empty($_POST["_d4g_giftname"]) &&
+        isset($_POST["_d4g_giftprice"]) && !empty($_POST["_d4g_giftprice"]) &&
+        is_numeric($_POST["_d4g_giftprice"]) && ($_POST["_d4g_giftprice"] > 0)) {
+
+      $desc = "";
+      if (isset($_POST["_d4g_giftdesc"]) && !empty($_POST["_d4g_giftdesc"])) {
+        $desc = $_POST["_d4g_giftdesc"];
+      }
+      $link = "";
+      if (isset($_POST["_d4g_giftlink"]) && !empty($_POST["_d4g_giftlink"])) {
+        $link = $_POST["_d4g_giftlink"];
+      }
+      $image = "";
+      if (isset($_POST["_d4g_giftimage"]) && !empty($_POST["_d4g_giftimage"])) {
+        $image = $_POST["_d4g_giftimage"];
+      }
+      
+      if ($gift) {
+
+        modifyGift($gift, $_POST["_d4g_giftname"], $_POST["_d4g_giftprice"],
+                   $desc, $link, $image);
+
+        saveXmlDataFile($doodle4gift);
+
+      }
+
+    }
+
+  }
+
+}
+
+
+
+
+/* ------------------------------------------------------------------------------------ */
 function actionDeleteWish($doodle4gift, $profiles, $gifts, $wish) {
 
   if ($wish) {
@@ -572,6 +615,14 @@ function performAction($doodle4gift, $profiles, $gifts) {
       } else {
 	displayProfileWishlist($login, $profile, $profiles, $gifts);
       }
+      break;
+    case "modifywish":
+      $profile = actionRetrieveProfile($profiles);
+      if ($profile == $login) {
+	$wish = actionRetrieveWish($profile);
+	actionModifyWish($doodle4gift, $gifts, $wish);
+      }
+      displayProfileWishlist($login, $profile, $profiles, $gifts);
       break;
     case "deletewish":
       $profile = actionRetrieveProfile($profiles);

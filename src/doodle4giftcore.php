@@ -23,7 +23,7 @@
 
 
 $SCRIPTNAME = "index.php5";
-$SCRIPTVERSION = "Mon, 02 Dec 2013 10:42:00 +0100";
+$SCRIPTVERSION = "Mon, 02 Dec 2013 22:42:00 +0100";
 $DEBUG = FALSE;
 
 $DATAPATH = "data/";
@@ -67,41 +67,6 @@ function createEmptyDataFile () {
   return $fileHandle;
 }
 
-/* ------------------------------------------------------------------------------------ */
-function createTestDataFile () {
-
-  global $SCRIPTVERSION;
-  global $DATAFILENAME;
-
-  $fileHandle = fopen($DATAFILENAME, 'w');
-
-  if ($fileHandle == FALSE) {
-    exit("Cannot create file " . $DATAFILENAME . ". Please check file access permissions.");
-  }
-
-  fwrite($fileHandle, "<?xml version=\"1.0\"?>\n");
-  fwrite($fileHandle, "<doodle4gift version=\"" . $SCRIPTVERSION . "\" date=\"" . date("r") . "\">\n");
-  fwrite($fileHandle, " <profiles>\n");
-  fwrite($fileHandle, "  <profile id=\"e6q5gh4\" password=\"eht864th6q84\" name=\"David Guetta\" email=\"david.guetta@ibiza.com\" avatar=\"robot\">\n");
-  fwrite($fileHandle, "   <wishlist>\n");
-  fwrite($fileHandle, "    <wish id=\"46546ehr\" gift=\"68t746zg\" leader=\"\" >\n");
-  fwrite($fileHandle, "     <contributors>\n");
-  fwrite($fileHandle, "      <contributor id=\"erg6jh4t\" profile=\"ukeu8k49\" amount=\"10\" paid=\"false\" />\n");
-  fwrite($fileHandle, "     </contributors>\n");
-  fwrite($fileHandle, "    </wish>\n");
-  fwrite($fileHandle, "   </wishlist>\n");
-  fwrite($fileHandle, "  </profile>\n");
-  fwrite($fileHandle, "  <profile id=\"ukeu8k49\" password=\"hz68464j\" name=\"Bob Sinclar\" email=\"bob.sinclar@miami.com\" avatar=\"alien\"><wishlist /></profile>\n");
-  fwrite($fileHandle, " </profiles>\n");
-  fwrite($fileHandle, " <gifts>\n");
-  fwrite($fileHandle, "  <gift id=\"68t746zg\" name=\"Clavier Bontempi\" price=\"64\" link=\"http://www.rueducommerce.fr/m/ps/mpid:MP-79BCEM14842277#!moid:MO-79BCEM25245925\" image=\"http://s3.static69.com/m/image-offre/5/f/9/1/5f91cfc7f66b5b2479a152673b09220c-500x500.jpg\">Clavier numérique • 40 touches moyennes (LA-DO) • 100 Sons • Polyphonie 16 notes • 32 Rythmes avec Easy Play et Arranger avec gestion facilitée des accords • 32 chansons préenregistrées avec Melody Off • Display Lcd pour afficher les fonctions courantes • 6 Dj Styles: rythmes avec effets spéciaux • Nouveau System 5: système simplifié pour apprendre à jouer immédiatement • Sequencer: pour enregistrer et réécouter ce que l’on joue • Transposer: pour changer la tonalité • Demosong • Métronome • Effets: Reverb, Sustain • Contrôles: Volume général, Start/Stop, Down Beat, Tempo +/– • 6 sons d’accompagnement • 6 pads avec enregistrement des accords • 100 groupes d’accords préenregistrés • Prise pour adaptateur sur secteur (non fourni) • Prise pour casque (non fourni) ou Chaine Hi-Fi • Prise pour micro (fourni) • Amplification: 1,5 W, système à 2 voies •Avertissement sonore d’arrêt • Alim: 6 piles à 1,5V-R6/AA (non fournies) • Porte-partition fourni • Livret méthode et Livret de chansons fournies • Dim: 600x232x67 mm</gift>\n");
-  fwrite($fileHandle, " </gifts>\n");
-  fwrite($fileHandle, "</doodle4gift>\n");
-
-  dbg("File " . $DATAFILENAME . " created");
-
-  return $fileHandle;
-}
 
 
 /* ------------------------------------------------------------------------------------ */
@@ -630,6 +595,26 @@ function newGift($gifts, $name, $price, $desc, $link, $image) {
   }
 
   return $gift;
+
+}
+
+/* ------------------------------------------------------------------------------------ */
+function modifyGift($gift, $name, $price, $desc, $link, $image) {
+
+  $attrs = $gift->attributes();
+
+  $attrs["name"] = $name;
+  $attrs["price"] = $price;
+
+  if ($desc) {
+    $gift[0] = $desc;
+  }
+  if ($link) {
+    $attrs["link"] = $link;
+  }
+  if ($image) {
+    $attrs["image"] = $image;
+  }
 
 }
 

@@ -162,17 +162,21 @@ function displayProfilesGifts($login, $profiles, $gifts) {
 /* ------------------------------------------------------------------------------------ */
 function displayProfileWishlist($login, $profile, $profiles, $gifts) {
 
-  displayProfileWishlistCore($login, $profile, $profiles, $gifts, NULL);
+  displayProfileWishlistCore($login, $profile, $profiles, $gifts, FALSE);
 
 }
 
 
 /* ------------------------------------------------------------------------------------ */
-function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $giftid) {
+function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $editwish) {
   global $SCRIPTNAME;
 
   if ($login && $profile) {
-    
+ 
+    if ($editwish) {
+      $editwishattrs = $editwish->attributes();
+    }
+   
     $profileattrs = $profile->attributes();
 
     print "<div class=\"elementlistcenter\"><div class=\"elementlist\"><div class=\"elementleft\">\n";
@@ -188,6 +192,11 @@ function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $giftid
       $iscont = FALSE;
 
       $wishattrs = $wish->attributes();
+
+      $doeditwish = ($editwish &&
+                     ($editwishattrs["id"] == $wishattrs["id"]) &&
+                     ($profile == $login));
+
       print "<a name=\"#" . $wishattrs["id"] . "\"></a>
              <div class=\"wish\" id=\"" . $wishattrs["id"] . "\">\n
              <table><tr><td class=\"leftdescription\">\n";
@@ -211,27 +220,44 @@ function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $giftid
 
       print "<div class=\"wishdescription\">\n";
 
+      if ($doeditwish) {
+        print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . $wishattrs["id"] . "\">\n";
+      }
+
       print "<table class=\"tabledescription\"><tr><td class=\"leftdescription\">";
 
       print "</td><td class=\"rightdescription\">";
 
+
       if ($profile == $login) {
 
-	print "<table><tr><td>";
-	print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . $wishattrs["id"] . "\">\n
+        if ($doeditwish) {
+
+          print "
+              <input type=\"hidden\" name=\"_d4g_action\" value=\"modifywish\" />\n
+              <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
+              <input type=\"hidden\" name=\"_d4g_wish\" value=\"".$wishattrs["id"]."\" />\n
+              <input class=\"inputclass\" type=\"submit\" value=\"Modify\" />\n";
+
+        } else {
+
+          print "<table><tr><td>";
+          print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . $wishattrs["id"] . "\">\n
               <input type=\"hidden\" name=\"_d4g_action\" value=\"editwish\" />\n
               <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
               <input type=\"hidden\" name=\"_d4g_wish\" value=\"".$wishattrs["id"]."\" />\n
-              <input class=\"inputclass\" type=\"submit\" value=\"Modify\" />\n
+              <input class=\"inputclass\" type=\"submit\" value=\"Edit\" />\n
              </form>\n";
-	print "</td><td>";
-	print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "\">\n
+          print "</td><td>";
+          print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "\">\n
               <input type=\"hidden\" name=\"_d4g_action\" value=\"deletewish\" />\n
               <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
               <input type=\"hidden\" name=\"_d4g_wish\" value=\"".$wishattrs["id"]."\" />\n
               <input class=\"inputclass\" type=\"submit\" value=\"Delete\" />\n
              </form>\n";
-	print "</td></tr></table>";
+          print "</td></tr></table>";
+
+        }
 
       } else {
 
@@ -253,22 +279,53 @@ function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $giftid
                 </div>\n
                </div>\n";       
 
-      }
+      } /* profile == login */
 
       print "</td></tr>";
 
-      print "<tr><td class=\"leftdescription\">Name</td><td class=\"rightdescription\">";
-      if (!empty($giftattrs["link"])) {
-        print "<a href=\"" . $giftattrs["link"] . "\" >" . $giftattrs["name"] . "</a>";
+
+      if ($doeditwish) {
+
+        echo "
+           <tr><td class=\"leftdescription\">
+          Name (*)</td><td class=\"rightdescription\">
+          <input class=\"fieldclass\" type=\"text\" name=\"_d4g_giftname\" size=\"15\" required value=\"" . $giftattrs["name"] . "\" />
+          </td></tr><tr><td class=\"leftdescription\">\n
+          Price (*)</td><td class=\"rightdescription\">
+          <input type=\"number\" name=\"_d4g_giftprice\" size=\"3\" required value=\"" . $giftattrs["price"] . "\" />
+          </td></tr><tr><td class=\"leftdescription\">\n
+          Description</td><td class=\"rightdescription\">
+          <textarea class=\"fieldclass\" name=\"_d4g_giftdesc\" >" . $gift[0] . "</textarea>
+          </td></tr><tr><td class=\"leftdescription\">\n
+          Buy link</td><td class=\"rightdescription\">
+          <input class=\"fieldclass\" type=\"url\" name=\"_d4g_giftlink\" value=\"" . $giftattrs["link"] . "\" />
+          </td></tr><tr><td class=\"leftdescription\">\n
+          Image link</td><td class=\"rightdescription\">
+          <input class=\"fieldclass\" type=\"url\" name=\"_d4g_giftimage\" value=\"" . $giftattrs["image"] . "\" />
+          </td></tr><tr>";
+
+
       } else {
-        print $giftattrs["name"];
-      }
-      print "</td></tr>";
-      print "<tr><td class=\"leftdescription\">Price</td><td class=\"rightdescription\">" . $giftattrs["price"] . "</td></tr>";
-      print "<tr><td class=\"leftdescription\">Description</td><td class=\"rightdescription\">" . $gift[0] . "</td></tr>";
+
+        print "<tr><td class=\"leftdescription\">Name</td><td class=\"rightdescription\">";
+        if (!empty($giftattrs["link"])) {
+          print "<a href=\"" . $giftattrs["link"] . "\" >" . $giftattrs["name"] . "</a>";
+        } else {
+          print $giftattrs["name"];
+        }
+        print "</td></tr>";
+        print "<tr><td class=\"leftdescription\">Price</td><td class=\"rightdescription\">" . $giftattrs["price"] . "</td></tr>";
+        print "<tr><td class=\"leftdescription\">Description</td><td class=\"rightdescription\">" . $gift[0] . "</td></tr>";
+
+
+      } /* doeditwish */
 
 
       print "</table>";
+
+      if ($doeditwish) {
+        print "</form>\n";
+      }
 
       print "</div>\n"; /* wish description */
 
@@ -402,7 +459,8 @@ function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $giftid
          <form method=\"POST\" action=\"" . $SCRIPTNAME . "\">\n
             <input type=\"hidden\" name=\"_d4g_action\" value=\"addwish\" />\n
             <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
-          <table class=\"tabledescription\"><tr><td class=\"leftdescription\">
+          <table class=\"tabledescription\">
+           <tr><td class=\"leftdescription\">
           Name (*)</td><td class=\"rightdescription\"><input class=\"fieldclass\" type=\"text\" name=\"_d4g_giftname\" placeholder=\"required\" size=\"15\" required /></td></tr><tr><td class=\"leftdescription\">\n
           Price (*)</td><td class=\"rightdescription\"><input type=\"number\" name=\"_d4g_giftprice\" size=\"3\" required /></td></tr><tr><td class=\"leftdescription\">\n
           Description</td><td class=\"rightdescription\"> <textarea class=\"fieldclass\" name=\"_d4g_giftdesc\" ></textarea></td></tr><tr><td class=\"leftdescription\">\n
