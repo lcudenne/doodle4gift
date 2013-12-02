@@ -435,11 +435,11 @@ function actionAddExistingWish($doodle4gift, $gifts, $profile) {
 }
 
 /* ------------------------------------------------------------------------------------ */
-function actionDeleteWish($doodle4gift, $profiles, $wish) {
+function actionDeleteWish($doodle4gift, $profiles, $gifts, $wish) {
 
   if ($wish) {
 
-    deleteWish($profiles, $wish);
+    deleteWish($profiles, $gifts, $wish);
     
     saveXmlDataFile($doodle4gift);
 
@@ -577,7 +577,7 @@ function performAction($doodle4gift, $profiles, $gifts) {
       $profile = actionRetrieveProfile($profiles);
       if ($profile == $login) {
 	$wish = actionRetrieveWish($profile);
-	actionDeleteWish($doodle4gift, $profiles, $wish);
+	actionDeleteWish($doodle4gift, $profiles, $gifts, $wish);
       }
       displayProfileWishlist($login, $profile, $profiles, $gifts);
       break;

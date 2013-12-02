@@ -97,7 +97,7 @@ function displayContributors($contributors) {
 
 
 /* ------------------------------------------------------------------------------------ */
-function displayGift($gift) {
+function displayGift($profiles, $gift) {
   $image = "img/gift.png";
 
   $attrs = $gift->attributes();
@@ -122,11 +122,11 @@ function displayGift($gift) {
 }
 
 /* ------------------------------------------------------------------------------------ */
-function displayGifts($gifts) {
+function displayGifts($profiles, $gifts) {
 
   print "<div class=\"elementlistcenter\"><div class=\"elementlist\">\n";
   foreach($gifts->children() as $gift) {
-    displayGift($gift);
+    displayGift($profiles, $gift);
   }
   print "</div></div>\n";
 
@@ -153,7 +153,7 @@ function displayProfilesGifts($login, $profiles, $gifts) {
 
   if ($login) {
     displayProfiles($profiles);
-    displayGifts($gifts);
+    displayGifts($profiles, $gifts);
   }
 
 }
@@ -205,7 +205,7 @@ function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $giftid
         $leader = getProfile($profiles, $wishattrs["leader"]);
       }
 
-      displayGift($gift);
+      displayGift($profiles, $gift);
 
       print "</td><td class=\"rightdescription\">";
 

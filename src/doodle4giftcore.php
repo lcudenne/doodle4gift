@@ -615,10 +615,11 @@ function deleteContributor($contributor) {
 }
 
 /* ------------------------------------------------------------------------------------ */
-function deleteWish($profiles, $wish) {
+function deleteWish($profiles, $gifts, $wish) {
 
   $attrs = $wish->attributes();
   $giftid = $attrs["gift"];
+  $gift = getGift($gifts, $giftid);
 
   if ($wish) {
     unset($wish[0]);
@@ -626,11 +627,9 @@ function deleteWish($profiles, $wish) {
 
   $nbwish = nbGiftWish($profiles, $giftid);
 
-  /*
   if ($nbwish == 0) {
     unset($gift[0]);
   }
-  */
 
 }
 
