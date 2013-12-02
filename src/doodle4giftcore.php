@@ -305,28 +305,56 @@ function getWish ($profile, $id) {
   if ($query && $query[0]) {
     $wish = $query[0];
     $attrs = $wish->attributes();
-    dbg("Found wish " . $attrs["id"] . $attrs["gift"]);
+    dbg("Found wish " . $attrs["id"] . " " . $attrs["gift"]);
   }
 
   return $wish;
 }
 
 /* ------------------------------------------------------------------------------------ */
-function getWishByGiftId ($profile, $gift) {
+function getWishByGiftId ($profile, $giftid) {
 
   $wish = FALSE;
   $wishlist = getWishlist ($profile);
 
-  $query = $wishlist->xpath("wish[@gift='" . $gift . "']");
+  $query = $wishlist->xpath("wish[@gift='" . $giftid . "']");
 
   if ($query && $query[0]) {
     $wish = $query[0];
     $attrs = $wish->attributes();
-    dbg("Found wish " . $attrs["id"] . $attrs["gift"]);
+    dbg("Found wish " . $attrs["id"] . " " . $attrs["gift"]);
   }
 
   return $wish;
 }
+
+/* ------------------------------------------------------------------------------------ */
+function getWishByGiftIdRaw ($profile, $giftid) {
+
+  $wish = FALSE;
+  $wishlist = getWishlist ($profile);
+  $similar = 1;
+
+  foreach($wishlist->children() as $wish) {
+
+    $attrs = $wish->attributes();
+    $similar = strcasecmp($giftid, $attrs["gift"]);
+    
+    if ($similar == 0) {
+      break;
+    }
+
+  }
+
+  if ($similar == 0) {
+    dbg("Found wish " . $attrs["gift"] . " " . $giftid . " by id (raw)");
+  } else {
+    $wish = FALSE;
+  }
+
+  return $wish;
+}
+
 
 
 /* ------------------------------------------------------------------------------------ */
@@ -355,10 +383,10 @@ function nbGiftWish ($profiles, $giftid) {
 
   foreach($profiles->children() as $profile) {
 
-    $wish = getWishByGiftId($profile, $giftid);
+    $wish = getWishByGiftIdRaw($profile, $giftid);
     
     if ($wish) {
-      $nbwish++;
+      $nbwish = $nbwish + 1;
     }
 
   }
@@ -605,11 +633,22 @@ function newGift($gifts, $name, $price, $desc, $link, $image) {
 
 }
 
+
+
+/* ------------------------------------------------------------------------------------ */
+function deleteNode($node) {
+
+  $dom = dom_import_simplexml($node);
+  $dom->parentNode->removeChild($dom);
+
+}
+
+
 /* ------------------------------------------------------------------------------------ */
 function deleteContributor($contributor) {
 
   if ($contributor) {
-    unset($contributor[0]);
+    deleteNode($contributor);
   }
 
 }
@@ -622,13 +661,13 @@ function deleteWish($profiles, $gifts, $wish) {
   $gift = getGift($gifts, $giftid);
 
   if ($wish) {
-    unset($wish[0]);
+    deleteNode($wish[0]);
   }
 
   $nbwish = nbGiftWish($profiles, $giftid);
 
   if ($nbwish == 0) {
-    unset($gift[0]);
+    deleteNode($gift);
   }
 
 }
