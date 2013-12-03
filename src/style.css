@@ -23,6 +23,11 @@ img:hover{
     border:none;
 }
 
+.textbase{
+    margin: 18px;
+    font-family:"Verdana";
+    font-size:12px;
+}
 
 .headerbar{
     display: inline-block;
@@ -247,3 +252,23 @@ img:hover{
     box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
     z-index:0;
 }
+
+.filetag{
+    display:none;
+    width:320px;
+    margin-top: -40px;
+    margin-left: -250px;
+    font-family:"Verdana";
+    font-size:12px;
+    background-color:#FFFFFF;
+    border:2px solid;
+    border-color:#BCBCBC;
+    border-bottom-left-radius:8px;
+    border-top-right-radius:8px;
+    box-shadow: 10px 10px 5px rgba(0,0,0,0.5);
+}
+
+.filetaghover:hover + .filetag{display:block; position:absolute; z-index: 999999;}
+.filetag:hover{display:block; position:absolute; z-index: 999999;}
+
+

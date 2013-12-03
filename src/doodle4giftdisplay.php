@@ -20,14 +20,39 @@
  */
 
 /* ------------------------------------------------------------------------------------ */
-function displayProfile($profile) {
+function displayProfile($gifts, $profile) {
   global $SCRIPTNAME;
 
   $attrs = $profile->attributes();
+
+  $gifts = getGiftsByProfile ($gifts, $profile);
+
   print " <div class=\"element\" id=\"" . $attrs["id"] .
-    "\" ><a href=\"" . $SCRIPTNAME . "?action=showprofile&amp;profile=" . $attrs["id"] .
-    "\"><img class=\"elementimg\" src=\"img/avatar_" . $attrs["avatar"] . ".png\" /><br /><div class=\"elementname\">"
-    . $attrs["name"] . "</div></a></div>\n";
+    "\" >";
+
+  if (!empty($gifts)) {
+    print "<div class=\"filetaghover\">";
+  }
+
+  print "<a href=\"" . $SCRIPTNAME . "?action=showprofile&amp;profile=" . $attrs["id"] . "\">
+         <img class=\"elementimg\" src=\"img/avatar_" . $attrs["avatar"] . ".png\" />
+         </a>";
+
+  if (!empty($gifts)) {
+
+    print "</div><div class=\"filetag\">
+           <div class=\"textbase\">Gifts attached to this profile</div>";
+  
+    foreach ($gifts as $gift) {
+      displaySmallGift($gift);
+    }
+
+    print "</div>";
+
+  }
+
+  print "<div class=\"elementname\">"
+    . $attrs["name"] . "</div></div>\n";
 
 }
 
@@ -45,11 +70,11 @@ function displaySmallProfile($profile) {
 
 
 /* ------------------------------------------------------------------------------------ */
-function displayProfiles($profiles) {
+function displayProfiles($profiles, $gifts) {
 
   print "<div class=\"elementlistcenter\"><div class=\"elementlist\">\n";
   foreach($profiles->children() as $profile) {
-    displayProfile($profile);
+    displayProfile($gifts, $profile);
   }
   print "</div></div>\n";
 
@@ -101,7 +126,8 @@ function displayGift($profiles, $gift) {
   $image = "img/gift.png";
 
   $attrs = $gift->attributes();
-  print "<div class=\"element\" id=\"" . $attrs["id"] . "\" >";
+  print "<div class=\"element\" id=\"" . $attrs["id"] . "\" >
+         <div class=\"filetaghover\">";
 
   if (!empty($attrs["link"])) {
     print "<a href=\"" . $attrs["link"] . "\" target=\"_blank\">";
@@ -110,16 +136,58 @@ function displayGift($profiles, $gift) {
     $image = $attrs["image"];
   }
 
-  print "<img class=\"elementimg\" src=\"" . $image . "\" /><br /><div class=\"elementname\">" .
-    $attrs["name"] . "</div>";
+  print "<img class=\"elementimg\" src=\"" . $image . "\" />";
 
   if ($attrs["link"]) {
     print "</a>";
   }
 
+  $res = getProfilesByGift($profiles, $gift);
+
+  print "</div>
+         <div class=\"filetag\">
+         <div class=\"textbase\">People that are also interested by this gift</div>";
+
+  foreach ($res as $profile) {
+    displaySmallProfile($profile);
+  }
+
+  print "</div>
+         <div class=\"elementname\">" .
+    $attrs["name"] . "</div>";
+
   print "</div>\n";
 
 }
+
+/* ------------------------------------------------------------------------------------ */
+function displaySmallGift($gift) {
+  $image = "img/gift.png";
+
+  $attrs = $gift->attributes();
+
+  print " <div class=\"smallelement\" id=\"" . $attrs["id"] .
+    "\" >";
+
+  if (!empty($attrs["link"])) {
+    print "<a href=\"" . $attrs["link"] . "\" target=\"_blank\">";
+  }
+  if (!empty($attrs["image"])) {
+    $image = $attrs["image"];
+  }
+
+  print "<img class=\"smallelementimg\" src=\"" . $image . "\" />";
+
+  if ($attrs["link"]) {
+    print "</a>";
+  }
+
+  print "<br /><div class=\"elementname\">"
+    . $attrs["name"] . "</div></div>\n";
+
+}
+
+
 
 /* ------------------------------------------------------------------------------------ */
 function displayGifts($profiles, $gifts) {
@@ -152,7 +220,7 @@ function displaySelectGifts($gifts) {
 function displayProfilesGifts($login, $profiles, $gifts) {
 
   if ($login) {
-    displayProfiles($profiles);
+    displayProfiles($profiles, $gifts);
     displayGifts($profiles, $gifts);
   }
 
@@ -181,7 +249,7 @@ function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $editwi
 
     print "<div class=\"elementlistcenter\"><div class=\"elementlist\"><div class=\"elementleft\">\n";
 
-    displayProfile($profile);
+    displayProfile($gifts, $profile);
 
     print "</div><div class=\"elementright\">\n";
 

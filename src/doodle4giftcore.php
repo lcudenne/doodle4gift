@@ -23,7 +23,7 @@
 
 
 $SCRIPTNAME = "index.php5";
-$SCRIPTVERSION = "Mon, 02 Dec 2013 22:42:00 +0100";
+$SCRIPTVERSION = "Tue, 03 Dec 2013 22:42:00 +0100";
 $DEBUG = FALSE;
 
 $DATAPATH = "data/";
@@ -252,6 +252,38 @@ function getProfileByEmail ($profiles, $email) {
 
 
 /* ------------------------------------------------------------------------------------ */
+function getProfilesByGift($profiles, $gift) {
+
+  $res = array();
+
+  $attrsgift = $gift->attributes();
+  $giftid = $attrsgift["id"];
+
+  foreach($profiles->children() as $profile) {
+ 
+    $wishlist = getWishlist ($profile);
+
+    $similar = 1;
+    foreach($wishlist->children() as $wish) {
+
+      $attrs = $wish->attributes();
+      $similar = strcasecmp($giftid, $attrs["gift"]);
+    
+      if ($similar == 0) {
+	array_push($res, $profile);
+	break;
+      }
+
+    }
+
+  }
+
+  return $res;
+
+}
+
+
+/* ------------------------------------------------------------------------------------ */
 function getWishlist ($profile) {
 
   $wishlist = $profile->wishlist[0];
@@ -413,6 +445,28 @@ function getGifts ($doodle4gift) {
 }
 
 /* ------------------------------------------------------------------------------------ */
+function getGiftsByProfile ($gifts, $profile) {
+
+  $res = array();
+
+  $wishlist = getWishlist ($profile);
+
+  foreach($wishlist->children() as $wish) {
+
+    $attrs = $wish->attributes();
+    
+    $gift = getGift($gifts, $attrs["gift"]);
+    if ($gift) {
+      array_push($res, $gift);
+    }
+
+  }
+
+  return $res;
+
+}
+
+/* ------------------------------------------------------------------------------------ */
 function getGift ($gifts, $id) {
 
   $gift = FALSE;
@@ -455,7 +509,6 @@ function getGiftByName ($gifts, $name) {
 
   return $gift;
 }
-
 
 
 
