@@ -23,7 +23,7 @@
 
 
 $SCRIPTNAME = "index.php5";
-$SCRIPTVERSION = "Tue, 03 Dec 2013 22:42:00 +0100";
+$SCRIPTVERSION = "Wed, 04 Dec 2013 22:42:00 +0100";
 $DEBUG = FALSE;
 
 $DATAPATH = "data/";
@@ -167,6 +167,25 @@ function getProfiles ($doodle4gift) {
 }
 
 /* ------------------------------------------------------------------------------------ */
+function setLanguageProfile($doodle4gift, $profile) {
+  global $LANGUAGES;
+  global $LANGUAGE;
+  global $S;
+
+  $attrs = $profile->attributes();
+
+  if (isset($attrs["language"])) {
+    $LANGUAGE = (string) $attrs["language"];
+    $S = $LANGUAGES[$LANGUAGE];
+  } else {
+    $profile->addAttribute("language", $LANGUAGE);
+    saveXmlDataFile($doodle4gift);
+  }
+
+}
+
+
+/* ------------------------------------------------------------------------------------ */
 function getProfile ($profiles, $id) {
 
   $profile = FALSE;
@@ -298,6 +317,26 @@ function getWish ($profile, $id) {
   $wishlist = getWishlist ($profile);
 
   $query = $wishlist->xpath("wish[@id='" . $id . "']");
+
+  if ($query && $query[0]) {
+    $wish = $query[0];
+    $attrs = $wish->attributes();
+    dbg("Found wish " . $attrs["id"] . " " . $attrs["gift"]);
+  }
+
+  return $wish;
+}
+
+/* ------------------------------------------------------------------------------------ */
+function getWishByGift ($profile, $gift) {
+
+  $wish = FALSE;
+  $wishlist = getWishlist ($profile);
+
+  $attrsg = $gift->attributes();
+  $giftid = $attrsg["id"];
+
+  $query = $wishlist->xpath("wish[@gift='" . $giftid . "']");
 
   if ($query && $query[0]) {
     $wish = $query[0];

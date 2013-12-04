@@ -68,6 +68,21 @@ function displaySmallProfile($profile) {
 
 }
 
+/* ------------------------------------------------------------------------------------ */
+function displaySmallProfileWish($profile, $wish) {
+  global $SCRIPTNAME;
+
+  $attrs = $profile->attributes();
+  $attrsw = $wish->attributes();
+
+  print " <div class=\"smallelement\" id=\"" . $attrs["id"] .
+    "\" ><a href=\"" . $SCRIPTNAME . "?action=showprofile&amp;profile=" . $attrs["id"] .
+    "#" . $attrsw["id"] . "\"><img class=\"smallelementimg\" src=\"img/avatar_" .
+    $attrs["avatar"] . ".png\" /><br /><div class=\"elementname\">" .
+    $attrs["name"] . "</div></a></div>\n";
+
+}
+
 
 /* ------------------------------------------------------------------------------------ */
 function displayProfiles($profiles, $gifts) {
@@ -149,7 +164,8 @@ function displayGift($profiles, $gift) {
          <div class=\"textbase\">People that are also interested by this gift</div>";
 
   foreach ($res as $profile) {
-    displaySmallProfile($profile);
+    $wish = getWishByGift ($profile, $gift);
+    displaySmallProfileWish($profile, $wish);
   }
 
   print "</div>

@@ -70,7 +70,8 @@ function getProfileLogin($profiles) {
 
 
 /* ------------------------------------------------------------------------------------ */
-function getLogin($profiles) {
+function getLogin($doodle4gift, $profiles) {
+  global $S;
   global $SCRIPTNAME;
 
   $profile = getProfileLogin($profiles);
@@ -83,8 +84,10 @@ function getLogin($profiles) {
 
   if ($profile) {
     
+    setLanguageProfile($doodle4gift, $profile);
+
     $attrs = $profile->attributes();
-    
+
     echo "
 <div class=\"logout\" >\n";
     echo "
@@ -99,25 +102,25 @@ function getLogin($profiles) {
     echo "</div></div>";
 
     echo "<div class=\"elementlistcenter\"><div class=\"elementlist\">
-<div class=\"login\" >\n
-Authenticate<br /><br />\n
+<div class=\"login\" >\n" . $S[1] . "
+<br /><br />\n
  <form method=\"POST\" action=\"" . $SCRIPTNAME . "?action=login\">\n
   <input type=\"hidden\" name=\"_d4g_action\" value=\"login\" />\n
-  Password <input type=\"password\" name=\"_d4g_password\" size=\"15\" required />\n
-           <input class=\"inputclass\" type=\"submit\" value=\"Login\" />\n
+  " . $S[2] . " <input type=\"password\" name=\"_d4g_password\" size=\"15\" required />\n
+           <input class=\"inputclass\" type=\"submit\" value=\"" . $S[5] . "\" />\n
  </form>\n
- <br/><p title=\"Fill in your e-mail address below and click Create! Your password will be sent again.\">Have you lost your password?</p>
+ <br/><p title=\"" . $S[3] . "\">" . $S[4] . "</p>
 </div>\n
 <div class=\"newprofile\" >\n
-Create account<br /><br />\n
+" . $S[6] . "<br /><br />\n
  <form method=\"POST\" action=\"" . $SCRIPTNAME . "\">\n
  <input type=\"hidden\" name=\"_d4g_action\" value=\"newprofile\" />\n
   <table><tr><td>\n
-   Name <input type=\"text\" name=\"_d4g_name\" placeholder=\"required\" size=\"15\" required />\n
+   " . $S[7] . " <input type=\"text\" name=\"_d4g_name\" placeholder=\"" . $S[8] . "\" size=\"15\" required />\n
   </td><td>\n
-   <input class=\"inputclass\" type=\"submit\" value=\"Create\"/>\n
+   <input class=\"inputclass\" type=\"submit\" value=\"" . $S[10] . "\"/>\n
   </td></tr><tr><td>\n
-   Email <input type=\"email\" name=\"_d4g_email\" placeholder=\"optional\" size=\"15\" />\n
+   Email <input type=\"email\" name=\"_d4g_email\" placeholder=\"" . $S[9] . "\" size=\"15\" />\n
   </td><td>\n
   </td></tr><tr><td colspan=\"2\">
 
@@ -158,11 +161,12 @@ Create account<br /><br />\n
 
 /* ------------------------------------------------------------------------------------ */
 function actionLogin($login) {
+  global $S;
 
   if ($login) {
-    echo "<div class=\"message\">You are now authenticated.</div>\n";
+    echo "<div class=\"message\">" . $S[11] . "</div>\n";
   } else {
-    echo "<div class=\"message\">Login failed.</div>\n";
+    echo "<div class=\"message\">" . $S[12] . "</div>\n";
   }
 
 }
@@ -538,7 +542,7 @@ function actionRemoveLead($doodle4gift, $login, $wish) {
 /* ------------------------------------------------------------------------------------ */
 function performAction($doodle4gift, $profiles, $gifts) {
 
-  $login = getLogin($profiles);
+  $login = getLogin($doodle4gift, $profiles);
 
   $action = "";
 

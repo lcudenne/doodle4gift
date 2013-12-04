@@ -20,6 +20,7 @@
  */
 session_start();
 
+include 'doodle4giftlanguages.php';
 include 'doodle4giftcore.php';
 include 'doodle4giftdisplay.php';
 include 'doodle4giftactions.php';
