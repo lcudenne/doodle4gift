@@ -70,11 +70,9 @@ function getProfileLogin($profiles) {
 
 
 /* ------------------------------------------------------------------------------------ */
-function getLogin($doodle4gift, $profiles) {
+function displayLogin($doodle4gift, $login) {
   global $S;
   global $SCRIPTNAME;
-
-  $profile = getProfileLogin($profiles);
   
   echo "<div class=\"elementlistcenter\"><div class=\"headerbar\"><div class=\"homebutton\">
      <a href=\"" . $SCRIPTNAME . "\">
@@ -82,11 +80,9 @@ function getLogin($doodle4gift, $profiles) {
      </div>";
 
 
-  if ($profile) {
-    
-    setLanguageProfile($doodle4gift, $profile);
+  if ($login) {
 
-    $attrs = $profile->attributes();
+    $attrs = $login->attributes();
 
     echo "
 <div class=\"logout\" >\n";
@@ -153,8 +149,6 @@ function getLogin($doodle4gift, $profiles) {
 ";
 
   }
-
-  return $profile;
 
 }
 
@@ -538,13 +532,39 @@ function actionRemoveLead($doodle4gift, $login, $wish) {
 }
 
 
+/* ------------------------------------------------------------------------------------ */
+function actionSetLanguagePre() {
+  global $S;
+  global $LANGUAGE;
+  global $LANGUAGES;
+
+  if (isset($_GET["language"]) && !empty($_GET["language"])) {
+    $LANGUAGE = $_GET["language"];
+    $S = $LANGUAGES[$LANGUAGE];
+  }
+
+}
+
+/* ------------------------------------------------------------------------------------ */
+function actionSetLanguagePost($doodle4gift, $login) {
+  global $LANGUAGE;
+
+  if ($login) {
+    $attrs = $login->attributes();
+    if (isset($attrs["language"])) {
+      $attrs["language"] = $LANGUAGE;
+    } else {
+      $login->addAttribute("language", $LANGUAGE);
+    }
+    saveXmlDataFile($doodle4gift);
+  }
+
+}
 
 
 
 /* ------------------------------------------------------------------------------------ */
 function performAction($doodle4gift, $profiles, $gifts) {
-
-  $login = getLogin($doodle4gift, $profiles);
 
   $action = "";
 
@@ -553,9 +573,25 @@ function performAction($doodle4gift, $profiles, $gifts) {
   }
   if (isset($_GET["action"]) && !empty($_GET["action"]) &&
       ((strcmp($_GET["action"], "login") == 0) ||
-       (strcmp($_GET["action"], "showprofile") == 0))) {
+       (strcmp($_GET["action"], "showprofile") == 0) ||
+       (strcmp($_GET["action"], "setlanguage") == 0))) {
     $action = $_GET["action"];
   }
+
+  if (strcmp($action, "setlanguage") == 0) {
+    actionSetLanguagePre();
+  }
+
+  $login = getProfileLogin($profiles);
+
+  if (strcmp($action, "setlanguage") == 0) {
+    actionSetLanguagePost($doodle4gift, $login);
+  }
+  if ($login) {
+    setLanguageProfile($doodle4gift, $login);
+  }
+
+  displayLogin($doodle4gift, $login);
 
   if (!empty($action)) {
 
@@ -566,6 +602,9 @@ function performAction($doodle4gift, $profiles, $gifts) {
       break;
     case "logout":
       actionLogout();
+      break;
+    case "setlanguage":
+      displayProfilesGifts($login, $profiles, $gifts);
       break;
     case "newprofile":
       actionNewProfile($doodle4gift, $profiles);

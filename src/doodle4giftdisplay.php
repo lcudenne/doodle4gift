@@ -597,7 +597,19 @@ function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $editwi
 /* ------------------------------------------------------------------------------------ */
 function displayFooter() {
 
-  print "<div class=\"footer\">\n
+  print "<div class=\"footerflag\">\n
+          <div class=\"languageflag\">
+           <a href=\"" . $SCRIPTNAME . "?action=setlanguage&amp;language=english\">
+            <img src=\"img/flag_english.png\" />
+           </a>
+          </div>
+          <div class=\"languageflag\">
+           <a href=\"" . $SCRIPTNAME . "?action=setlanguage&amp;language=francais\">
+            <img src=\"img/flag_francais.png\" />
+           </a>
+          </div>
+         </div>
+         <div class=\"footer\">\n
           This is <a href=\"https://sites.google.com/site/doodle4gift/\">doodle4gift</a>, the concurrent gift manager\n
          </div>\n";
 
