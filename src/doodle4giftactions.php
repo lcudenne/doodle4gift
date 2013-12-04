@@ -93,7 +93,7 @@ function getLogin($doodle4gift, $profiles) {
     echo "
 <form method=\"POST\" action=\"" . $SCRIPTNAME . "\">\n
  <input type=\"hidden\" name=\"_d4g_action\" value=\"logout\" />\n
- Welcome, " . $attrs["name"] . " <input type=\"submit\" value=\"Logout\" />\n
+ " . $S[14] . ", " . $attrs["name"] . " <input type=\"submit\" value=\"" . $S[15] . "\" />\n
 </form>\n
 </div></div></div>\n";
     
@@ -174,13 +174,15 @@ function actionLogin($login) {
 
 /* ------------------------------------------------------------------------------------ */
 function actionLogout() {
+  global $S;
 
-  echo "<div class=\"message\">You are not authenticated.</div>\n";
+  echo "<div class=\"message\">" . $S[13] . "</div>\n";
 
 }
 
 /* ------------------------------------------------------------------------------------ */
 function actionNewProfile($doodle4gift, $profiles) {
+  global $S;
   global $SCRIPTNAME;
 
   $profile = FALSE;
@@ -203,7 +205,7 @@ function actionNewProfile($doodle4gift, $profiles) {
     if ($profile) {
       saveXmlDataFile($doodle4gift);
     } else {
-    echo "<div class=\"message\">Profile " . $name . " " . $email  . " already exists</div>\n";
+    echo "<div class=\"message\">Profile " . $name . " " . $email  . " " . $S[16] . "</div>\n";
   }
 
   } else {
@@ -215,19 +217,19 @@ function actionNewProfile($doodle4gift, $profiles) {
     $attrs = $profile->attributes();
     $password = $attrs["password"];
     echo "<div class=\"message\">Profile " . $name 
-      . " created.<br />\n Please use the following password to authenticate, or use this private link: <a href=\"" . $SCRIPTNAME . "?action=login&amp;password="
+      . " " . $S[17] . ".<br />\n " . $S[18] . " <a href=\"" . $SCRIPTNAME . "?action=login&amp;password="
       . $password . "\">" . $password . "</a></div>\n";
     
     if ($email) {
-      $subject = "Welcome to Doodle4Gift!";
-      $msg = "Dear " . $name . ",\n\nThank you for joining this Doodle4Gift.\nYou can access your private profile by authenticating with the following password: " . $password . "\n\nOr by clicking on the following link (do not share this link):\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "?action=login&password=" . $password . "\n\nIf you want to share this Doodle4Gift, please use:\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "\n\nRegards,\nDoodle4Gift.\n";
+      $subject = $S[19];
+      $msg = $S[20] . " " . $name . ",\n\n" . $S[21] . "\n" . $S[22] . " " . $password . "\n\n" . $S[23] . "\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "?action=login&password=" . $password . "\n\n" . $S[24] . "\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "\n\n" . $S[25] . ",\nDoodle4Gift.\n";
       $headers = "From: Doodle4Gift <noreply@" . $_SERVER["SERVER_NAME"] . ">"."\r\n";
       mail($email, $subject, $msg, $headers);
-      echo "<div class=\"message\">A confirmation email has been sent to " . $email . "</div>\n";
+      echo "<div class=\"message\">" . $S[26] . " " . $email . "</div>\n";
     }
 
   } else {
-    echo "<div class=\"message\">Could not create profile " . $name . " " . $email  . "</div>\n";
+    echo "<div class=\"message\">" . $S[27] . " " . $name . " " . $email  . "</div>\n";
   }
 
 }

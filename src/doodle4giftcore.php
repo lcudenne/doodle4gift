@@ -553,6 +553,7 @@ function getGiftByName ($gifts, $name) {
 
 /* ------------------------------------------------------------------------------------ */
 function newProfile($profiles, $name, $email, $avatar) {
+  global $S;
 
   $profile = NULL;
 
@@ -570,11 +571,11 @@ function newProfile($profiles, $name, $email, $avatar) {
     $password = $attrs["password"];
 
     if ($email) {
-      $subject = "Doodle4Gift password recovery";
-      $msg = "Dear " . $pname . ",\n\nYou can access your private profile by authenticating with the following password: " . $password . "\n\nOr by clicking on the following link (do not share this link):\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "?action=login&password=" . $password . "\n\nIf you want to share this Doodle4Gift, please use:\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "\n\nRegards,\nDoodle4Gift.\n";
+      $subject = $S[45];
+      $msg = $S[20] . " " . $pname . ",\n\n" . $S[22] . " " . $password . "\n\n" . $S[23] . "\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "?action=login&password=" . $password . "\n\n" . $S[24] . "\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "\n\n" . $S[25] . ",\nDoodle4Gift.\n";
       $headers = "From: Doodle4Gift <noreply@" . $_SERVER["SERVER_NAME"] . ">"."\r\n";
       mail($email, $subject, $msg, $headers);
-      echo "<div class=\"message\">Your password has been sent to " . $email . "</div>\n";
+      echo "<div class=\"message\">" . $S[46] . " " . $email . "</div>\n";
     }
 
   } else {
