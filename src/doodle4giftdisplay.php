@@ -287,9 +287,11 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 
       $wishattrs = $wish->attributes();
 
+      $creator = getWishCreator($doodle4gift, $profiles, $wish, $profile);
+
       $doeditwish = ($editwish &&
                      ($editwishattrs["id"] == $wishattrs["id"]) &&
-                     ($profile == $login));
+                     (($profile == $login) || ($creator == $login)));
 
       print "<a name=\"#" . $wishattrs["id"] . "\"></a>
              <div class=\"wish\" id=\"" . $wishattrs["id"] . "\">\n
@@ -302,8 +304,6 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
       }
 
       $giftattrs = $gift->attributes();
-
-      $creator = getWishCreator($doodle4gift, $profiles, $wish, $profile);
 
       $leader = FALSE;
       if (!empty($wishattrs["leader"])) {
@@ -325,7 +325,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
       print "</td><td class=\"rightdescription\">";
 
 
-      if ($profile == $login) {
+      if (($profile == $login) || ($creator == $login)) {
 
         if ($doeditwish) {
 
@@ -355,7 +355,10 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 
         }
 
-      } else {
+      } /* profile == login */
+
+
+      if ($profile != $login) {
 
         $sum = 0;
         $paid = 0;
@@ -375,7 +378,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
                 </div>\n
                </div>\n";       
 
-      } /* profile == login */
+      } /* profile != login */
 
       print "</td></tr>";
 

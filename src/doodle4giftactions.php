@@ -435,7 +435,7 @@ function actionAddExistingWish($doodle4gift, $gifts, $profile, $login) {
 }
 
 /* ------------------------------------------------------------------------------------ */
-function actionModifyWish($doodle4gift, $gifts, $wish) {
+function actionModifyWish($doodle4gift, $gifts, $wish, $login) {
 
   if ($wish) {
 
@@ -463,6 +463,8 @@ function actionModifyWish($doodle4gift, $gifts, $wish) {
 
         modifyGift($gift, $_POST["_d4g_giftname"], $_POST["_d4g_giftprice"],
                    $desc, $link, $image);
+
+	setWishCreator($wish, $login);
 
         saveXmlDataFile($doodle4gift);
 
@@ -654,8 +656,9 @@ function performAction($doodle4gift, $profiles, $gifts) {
       break;
     case "editwish":
       $profile = actionRetrieveProfile($profiles);
-      if ($profile == $login) {
-	$wish = actionRetrieveWish($profile);
+      $wish = actionRetrieveWish($profile);
+      $creator = getWishCreator($doodle4gift, $profiles, $wish, $profile);
+      if (($profile == $login) || ($creator == $login)) {
 	displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $gifts, $wish);
       } else {
 	displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
@@ -663,9 +666,10 @@ function performAction($doodle4gift, $profiles, $gifts) {
       break;
     case "modifywish":
       $profile = actionRetrieveProfile($profiles);
-      if ($profile == $login) {
-	$wish = actionRetrieveWish($profile);
-	actionModifyWish($doodle4gift, $gifts, $wish);
+      $wish = actionRetrieveWish($profile);
+      $creator = getWishCreator($doodle4gift, $profiles, $wish, $profile);
+      if (($profile == $login) || ($creator == $login)) {
+	actionModifyWish($doodle4gift, $gifts, $wish, $login);
       }
       displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
       break;

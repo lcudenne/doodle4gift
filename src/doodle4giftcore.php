@@ -626,7 +626,7 @@ function newWish($profile, $gift, $login) {
 }
 
 /* ------------------------------------------------------------------------------------ */
-function setWishCreator($doodle4gift, $wish, $profile) {
+function setWishCreator($wish, $profile) {
 
   $attrsw = $wish->attributes();
   $attrsp = $profile->attributes();
@@ -635,7 +635,6 @@ function setWishCreator($doodle4gift, $wish, $profile) {
     $attrsw["creator"] = $attrsp["id"];
   } else {
     $wish->addAttribute("creator", $attrsp["id"]);
-    saveXmlDataFile($doodle4gift);
   }
 
 }
