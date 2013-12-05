@@ -596,12 +596,14 @@ function newProfile($profiles, $name, $email, $avatar) {
 }
 
 /* ------------------------------------------------------------------------------------ */
-function newWish($profile, $gift) {
+function newWish($profile, $gift, $login) {
 
   $wish = NULL;
 
   $attrs = $gift->attributes();
   $giftid = $attrs["id"];
+  $attrsl = $login->attributes();
+  $loginid = $attrsl["id"];
 
   $present = getWishByGiftId($profile, $giftid);
 
@@ -611,6 +613,7 @@ function newWish($profile, $gift) {
     $wish = $wishlist->addChild("wish");
     $wish->addAttribute("id", $id);
     $wish->addAttribute("gift", $giftid);
+    $wish->addAttribute("creator", $loginid);
     $wish->addAttribute("leader", "");
     $wish->addChild("contributors");
     dbg("New wish added " . $id . " " . $giftid);
@@ -621,6 +624,41 @@ function newWish($profile, $gift) {
   return $wish;
 
 }
+
+/* ------------------------------------------------------------------------------------ */
+function setWishCreator($doodle4gift, $wish, $profile) {
+
+  $attrsw = $wish->attributes();
+  $attrsp = $profile->attributes();
+
+  if (isset($attrsw["creator"])) {
+    $attrsw["creator"] = $attrsp["id"];
+  } else {
+    $wish->addAttribute("creator", $attrsp["id"]);
+    saveXmlDataFile($doodle4gift);
+  }
+
+}
+
+/* ------------------------------------------------------------------------------------ */
+function getWishCreator($doodle4gift, $profiles, $wish, $profile) {
+
+  $creator = $profile;
+
+  $attrsw = $wish->attributes();
+  $attrsp = $profile->attributes();
+
+  if (isset($attrsw["creator"])) {
+    $creator = getProfile($profiles, $attrsw["creator"]);
+  } else {
+    $wish->addAttribute("creator", $attrsp["id"]);
+    saveXmlDataFile($doodle4gift);
+  }
+
+  return $creator;
+}
+
+
 
 /* ------------------------------------------------------------------------------------ */
 function newContributor($wish, $profile, $amount) {

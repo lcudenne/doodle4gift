@@ -248,15 +248,15 @@ function displayProfilesGifts($login, $profiles, $gifts) {
 
 
 /* ------------------------------------------------------------------------------------ */
-function displayProfileWishlist($login, $profile, $profiles, $gifts) {
+function displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts) {
 
-  displayProfileWishlistCore($login, $profile, $profiles, $gifts, FALSE);
+  displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $gifts, FALSE);
 
 }
 
 
 /* ------------------------------------------------------------------------------------ */
-function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $editwish) {
+function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $gifts, $editwish) {
   global $S;
   global $SCRIPTNAME;
 
@@ -275,6 +275,11 @@ function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $editwi
     print "</div><div class=\"elementright\">\n";
 
     $wishlist = getWishlist($profile);
+
+
+    /**
+     * For each wish
+     */
 
     foreach($wishlist->children() as $wish) {
 
@@ -297,6 +302,8 @@ function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $editwi
       }
 
       $giftattrs = $gift->attributes();
+
+      $creator = getWishCreator($doodle4gift, $profiles, $wish, $profile);
 
       $leader = FALSE;
       if (!empty($wishattrs["leader"])) {
@@ -424,6 +431,35 @@ function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $editwi
       if ($profile != $login) {
 
         print "<tr><td>\n";
+	
+	/* creator */
+	print "<div class=\"creator\">";
+
+	displaySmallProfile($creator);
+
+	print "</div>"; /* creator */
+
+        print "</td><td>\n"; /* wish header */
+
+	$contributors = getContributors($wish);
+	
+	foreach($contributors->children() as $contributor) {
+	  
+	  $contributorattrs = $contributor->attributes();
+          $contprofile = getProfile($profiles, $contributorattrs["profile"]);
+	  
+          if ($contprofile == $login) {
+            $mycont = $contributor;
+            $iscont = TRUE;
+          }
+
+          displaySmallProfile($contprofile);
+
+	} /* for each contributor */
+
+        print "<tr><td>";
+
+	/* leader */
 
         print "<div class=\"leader\">";
 
@@ -447,27 +483,9 @@ function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $editwi
              </form>\n";
         }
         
-        print "</div>";
+        print "</div>"; /* leader */
 
-        print "</td><td>\n"; /* wish header */
-
-	$contributors = getContributors($wish);
-	
-	foreach($contributors->children() as $contributor) {
-	  
-	  $contributorattrs = $contributor->attributes();
-          $contprofile = getProfile($profiles, $contributorattrs["profile"]);
-	  
-          if ($contprofile == $login) {
-            $mycont = $contributor;
-            $iscont = TRUE;
-          }
-
-          displaySmallProfile($contprofile);
-
-	} /* for each contributor */
-
-        print "<tr><td></td><td>\n"; /* wish header */
+	print "</td><td>\n"; /* wish header */
 
         print "<table class=\"tabledescription\"><tr><td class=\"leftdescription\">\n";
         displaysmallprofile($login);
@@ -596,6 +614,7 @@ function displayProfileWishlistCore($login, $profile, $profiles, $gifts, $editwi
 
 /* ------------------------------------------------------------------------------------ */
 function displayFooter() {
+  global $SCRIPTNAME;
 
   print "<div class=\"footerflag\">\n
           <div class=\"languageflag\">

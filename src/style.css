@@ -216,14 +216,22 @@ img:hover{
     background-color: #AAFFCC;
 }
 
-
-.leader{
+.creator{
     display: inline-block;
-    border:1px solid #777777;
+    border:1px solid #AACCFF;
     border-radius: 4px;
     box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
     margin: 12px;
-    background-color: #F2F2F2;
+    background-color: #BBDDFF;
+}
+
+.leader{
+    display: inline-block;
+    border:1px solid #AAFFCC;
+    border-radius: 4px;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    margin: 12px;
+    background-color: #BBFFDD;
 }
 
 .message{

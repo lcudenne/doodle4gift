@@ -375,7 +375,7 @@ function actionDeleteContributor($doodle4gift, $profiles, $login, $contributor) 
 
 
 /* ------------------------------------------------------------------------------------ */
-function actionAddWish($doodle4gift, $gifts, $profile) {
+function actionAddWish($doodle4gift, $gifts, $profile, $login) {
 
   $gift = FALSE;
   $wish = FALSE;
@@ -401,7 +401,7 @@ function actionAddWish($doodle4gift, $gifts, $profile) {
                     $desc, $link, $image);
 
     if ($gift) {
-      $wish = newWish($profile, $gift);
+      $wish = newWish($profile, $gift, $login);
     }
 
     if ($wish) {
@@ -413,7 +413,7 @@ function actionAddWish($doodle4gift, $gifts, $profile) {
 }
 
 /* ------------------------------------------------------------------------------------ */
-function actionAddExistingWish($doodle4gift, $gifts, $profile) {
+function actionAddExistingWish($doodle4gift, $gifts, $profile, $login) {
 
   $gift = FALSE;
   $wish = FALSE;
@@ -423,7 +423,7 @@ function actionAddExistingWish($doodle4gift, $gifts, $profile) {
     $gift = getGift($gifts, $_POST["_d4g_giftid"]);
 
     if ($gift) {
-      $wish = newWish($profile, $gift);
+      $wish = newWish($profile, $gift, $login);
     }
 
     if ($wish) {
@@ -611,7 +611,7 @@ function performAction($doodle4gift, $profiles, $gifts) {
       break;
     case "showprofile":
       $profile = actionRetrieveProfile($profiles);
-      displayProfileWishlist($login, $profile, $profiles, $gifts);
+      displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
       break;
     case "addcontributor":
       $profile = actionRetrieveProfile($profiles);
@@ -619,46 +619,46 @@ function performAction($doodle4gift, $profiles, $gifts) {
 	$wish = actionRetrieveWish($profile);
 	actionAddContributor($doodle4gift, $login, $wish);
       }
-      displayProfileWishlist($login, $profile, $profiles, $gifts);
+      displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
       break;
     case "setamount":
       $profile = actionRetrieveProfile($profiles);
       $wish = actionRetrieveWish($profile);
       $contributor = actionRetrieveContributor($wish);
       actionSetAmount($doodle4gift, $contributor);
-      displayProfileWishlist($login, $profile, $profiles, $gifts);
+      displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
       break;
     case "paycontribution":
       $profile = actionRetrieveProfile($profiles);
       $wish = actionRetrieveWish($profile);
       $contributor = actionRetrieveContributor($wish);
       actionPayContribution($doodle4gift, $profiles, $login, $contributor);
-      displayProfileWishlist($login, $profile, $profiles, $gifts);
+      displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
       break;
     case "deletecontributor":
       $profile = actionRetrieveProfile($profiles);
       $wish = actionRetrieveWish($profile);
       $contributor = actionRetrieveContributor($wish);
       actionDeleteContributor($doodle4gift, $profiles, $login, $contributor);
-      displayProfileWishlist($login, $profile, $profiles, $gifts);
+      displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
       break;
     case "addwish":
       $profile = actionRetrieveProfile($profiles);
-      actionAddWish($doodle4gift, $gifts, $profile);
-      displayProfileWishlist($login, $profile, $profiles, $gifts);
+      actionAddWish($doodle4gift, $gifts, $profile, $login);
+      displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
       break;
     case "addexistingwish":
       $profile = actionRetrieveProfile($profiles);
-      actionAddExistingWish($doodle4gift, $gifts, $profile);
-      displayProfileWishlist($login, $profile, $profiles, $gifts);
+      actionAddExistingWish($doodle4gift, $gifts, $profile, $login);
+      displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
       break;
     case "editwish":
       $profile = actionRetrieveProfile($profiles);
       if ($profile == $login) {
 	$wish = actionRetrieveWish($profile);
-	displayProfileWishlistCore($login, $profile, $profiles, $gifts, $wish);
+	displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $gifts, $wish);
       } else {
-	displayProfileWishlist($login, $profile, $profiles, $gifts);
+	displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
       }
       break;
     case "modifywish":
@@ -667,7 +667,7 @@ function performAction($doodle4gift, $profiles, $gifts) {
 	$wish = actionRetrieveWish($profile);
 	actionModifyWish($doodle4gift, $gifts, $wish);
       }
-      displayProfileWishlist($login, $profile, $profiles, $gifts);
+      displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
       break;
     case "deletewish":
       $profile = actionRetrieveProfile($profiles);
@@ -675,19 +675,19 @@ function performAction($doodle4gift, $profiles, $gifts) {
 	$wish = actionRetrieveWish($profile);
 	actionDeleteWish($doodle4gift, $profiles, $gifts, $wish);
       }
-      displayProfileWishlist($login, $profile, $profiles, $gifts);
+      displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
       break;
     case "takelead":
       $profile = actionRetrieveProfile($profiles);
       $wish = actionRetrieveWish($profile);
       actionTakeLead($doodle4gift, $login, $wish);
-      displayProfileWishlist($login, $profile, $profiles, $gifts);
+      displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
       break;
     case "removelead":
       $profile = actionRetrieveProfile($profiles);
       $wish = actionRetrieveWish($profile);
       actionRemoveLead($doodle4gift, $login, $wish);
-      displayProfileWishlist($login, $profile, $profiles, $gifts);
+      displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
       break;
     default:
       dbg("Unknown action " . $action);
