@@ -65,7 +65,8 @@ $ENGLISH = array(
                  43 => "Choose from",
                  44 => "Choose",
                  45 => "Doodle4Gift password recovery",
-                 46 => "Your password has been sent to"
+                 46 => "Your password has been sent to",
+		 47 => "Surprise"
 		 );
 
 $FRANCAIS = array(
@@ -114,7 +115,8 @@ $FRANCAIS = array(
                   43 => "Choisir à partir de",
                   44 => "Choisir",
                   45 => "Récupération de mot de passe Doodle4Gift",
-                  46 => "Votre mot de passe a été envoyé à"
+                  46 => "Votre mot de passe a été envoyé à",
+		  47 => "Surprise"
 		  );
 
 $LANGUAGES = array(

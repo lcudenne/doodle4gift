@@ -20,13 +20,13 @@
  */
 
 /* ------------------------------------------------------------------------------------ */
-function displayProfile($gifts, $profile) {
+function displayProfile($doodle4gift, $login, $gifts, $profile) {
   global $S;
   global $SCRIPTNAME;
 
   $attrs = $profile->attributes();
 
-  $gifts = getGiftsByProfile ($gifts, $profile);
+  $gifts = getGiftsByProfile ($doodle4gift, $gifts, $profile);
 
   print " <div class=\"element\" id=\"" . $attrs["id"] .
     "\" >";
@@ -86,11 +86,11 @@ function displaySmallProfileWish($profile, $wish) {
 
 
 /* ------------------------------------------------------------------------------------ */
-function displayProfiles($profiles, $gifts) {
+function displayProfiles($doodle4gift, $login, $profiles, $gifts) {
 
   print "<div class=\"elementlistcenter\"><div class=\"elementlist\">\n";
   foreach($profiles->children() as $profile) {
-    displayProfile($gifts, $profile);
+    displayProfile($doodle4gift, $login, $gifts, $profile);
   }
   print "</div></div>\n";
 
@@ -209,25 +209,29 @@ function displaySmallGift($gift) {
 
 
 /* ------------------------------------------------------------------------------------ */
-function displayGifts($profiles, $gifts) {
+function displayGifts($doodle4gift, $profiles, $gifts) {
 
   print "<div class=\"elementlistcenter\"><div class=\"elementlist\">\n";
   foreach($gifts->children() as $gift) {
-    displayGift($profiles, $gift);
+    if (!getGiftSurprise($doodle4gift, $gift)) {
+      displayGift($profiles, $gift);
+    }
   }
   print "</div></div>\n";
 
 }
 
 /* ------------------------------------------------------------------------------------ */
-function displaySelectGifts($gifts) {
+function displaySelectGifts($doodle4gift, $gifts) {
   global $S;
 
   print "<select class=\"fieldclass\" name=\"_d4g_giftid\" >\n";
   foreach($gifts->children() as $gift) {
-    $attrs = $gift->attributes();
-    print " <option value=\"" . $attrs["id"] . "\">" . $attrs["name"]
-      . " (" . $S[30] . " " . $attrs["price"] . ")</option>\n";
+    if (!getGiftSurprise($doodle4gift, $gift)) {
+      $attrs = $gift->attributes();
+      print " <option value=\"" . $attrs["id"] . "\">" . $attrs["name"]
+	. " (" . $S[30] . " " . $attrs["price"] . ")</option>\n";
+    }
   }
   print "</select>\n";
 
@@ -237,11 +241,11 @@ function displaySelectGifts($gifts) {
 
 
 /* ------------------------------------------------------------------------------------ */
-function displayProfilesGifts($login, $profiles, $gifts) {
+function displayProfilesGifts($doodle4gift, $login, $profiles, $gifts) {
 
   if ($login) {
-    displayProfiles($profiles, $gifts);
-    displayGifts($profiles, $gifts);
+    displayProfiles($doodle4gift, $login, $profiles, $gifts);
+    displayGifts($doodle4gift, $profiles, $gifts);
   }
 
 }
@@ -270,7 +274,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 
     print "<div class=\"elementlistcenter\"><div class=\"elementlist\"><div class=\"elementleft\">\n";
 
-    displayProfile($gifts, $profile);
+    displayProfile($doodle4gift, $login, $gifts, $profile);
 
     print "</div><div class=\"elementright\">\n";
 
@@ -287,7 +291,24 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 
       $wishattrs = $wish->attributes();
 
+      $gift = getGift($gifts, $wishattrs["gift"]);
+
+      if ($gift == NULL) {
+	exit("Cannot retrieve Gift " . $wishattrs["gift"]);
+      }
+
+      $surprise = getGiftSurprise($doodle4gift, $gift);
+
+      if (!$surprise || ($login != $profile)) {
+
+      $giftattrs = $gift->attributes();
+
       $creator = getWishCreator($doodle4gift, $profiles, $wish, $profile);
+
+      $leader = FALSE;
+      if (!empty($wishattrs["leader"])) {
+        $leader = getProfile($profiles, $wishattrs["leader"]);
+      }
 
       $doeditwish = ($editwish &&
                      ($editwishattrs["id"] == $wishattrs["id"]) &&
@@ -296,19 +317,6 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
       print "<a name=\"#" . $wishattrs["id"] . "\"></a>
              <div class=\"wish\" id=\"" . $wishattrs["id"] . "\">\n
              <table><tr><td class=\"leftdescription\">\n";
-
-      $gift = getGift($gifts, $wishattrs["gift"]);
-
-      if ($gift == NULL) {
-	exit("Cannot retrieve Gift " . $wishattrs["gift"]);
-      }
-
-      $giftattrs = $gift->attributes();
-
-      $leader = FALSE;
-      if (!empty($wishattrs["leader"])) {
-        $leader = getProfile($profiles, $wishattrs["leader"]);
-      }
 
       displayGift($profiles, $gift);
 
@@ -391,8 +399,17 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
           <input class=\"fieldclass\" type=\"text\" name=\"_d4g_giftname\" size=\"15\" required value=\"" . $giftattrs["name"] . "\" />
           </td></tr><tr><td class=\"leftdescription\">\n
           " . $S[30] . " (*)</td><td class=\"rightdescription\">
-          <input type=\"number\" name=\"_d4g_giftprice\" size=\"3\" required value=\"" . $giftattrs["price"] . "\" />
-          </td></tr><tr><td class=\"leftdescription\">\n
+          <input type=\"number\" name=\"_d4g_giftprice\" size=\"3\" required value=\"" . $giftattrs["price"] . "\" /> ";
+
+	if ($profile != $login) {
+	    echo $S[47] . " <input type=\"checkbox\" name=\"_d4g_giftsurprise\" ";
+	    if ($surprise) {
+	      echo "checked";
+	    }
+	    echo "/>";
+	}
+
+	echo "</td></tr><tr><td class=\"leftdescription\">\n
           " . $S[37] . "</td><td class=\"rightdescription\">
           <textarea class=\"fieldclass\" name=\"_d4g_giftdesc\" >" . $gift[0] . "</textarea>
           </td></tr><tr><td class=\"leftdescription\">\n
@@ -413,7 +430,11 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
           print $giftattrs["name"];
         }
         print "</td></tr>";
-        print "<tr><td class=\"leftdescription\">" . $S[30] . "</td><td class=\"rightdescription\">" . $giftattrs["price"] . "</td></tr>";
+        print "<tr><td class=\"leftdescription\">" . $S[30] . "</td><td class=\"rightdescription\">" . $giftattrs["price"];
+	if ($surprise) {
+	  print " <div class=\"surprise\">" . $S[47] . "</div><img class=\"verysmallelementimg\" src=\"img/gift.png\" />";
+	}
+	print "</td></tr>";
         print "<tr><td class=\"leftdescription\">" . $S[37] . "</td><td class=\"rightdescription\">" . $gift[0] . "</td></tr>";
 
 
@@ -558,6 +579,8 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 
       print "</div>\n"; /* wish */
 
+      } /* if not surprise */
+
     } /* for each wish */
 
     print "<div class=\"wish\" >\n
@@ -572,7 +595,13 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
           <table class=\"tabledescription\">
            <tr><td class=\"leftdescription\">
           " . $S[7] . " (*)</td><td class=\"rightdescription\"><input class=\"fieldclass\" type=\"text\" name=\"_d4g_giftname\" placeholder=\"" . $S[8] . "\" size=\"15\" required /></td></tr><tr><td class=\"leftdescription\">\n
-          " . $S[30] . " (*)</td><td class=\"rightdescription\"><input type=\"number\" name=\"_d4g_giftprice\" size=\"3\" required /></td></tr><tr><td class=\"leftdescription\">\n
+          " . $S[30] . " (*)</td><td class=\"rightdescription\"><input type=\"number\" name=\"_d4g_giftprice\" size=\"3\" required /> ";
+
+    if ($profile != $login) {
+      echo $S[47] . " <input type=\"checkbox\" name=\"_d4g_giftsurprise\" />";
+    }
+
+    echo "</td></tr><tr><td class=\"leftdescription\">\n
           " . $S[37] . "</td><td class=\"rightdescription\"> <textarea class=\"fieldclass\" name=\"_d4g_giftdesc\" ></textarea></td></tr><tr><td class=\"leftdescription\">\n
           " . $S[38] . "</td><td class=\"rightdescription\"> <input class=\"fieldclass\" type=\"url\" name=\"_d4g_giftlink\" /></td></tr><tr><td class=\"leftdescription\">\n
           " . $S[39] . "</td><td class=\"rightdescription\"> <input class=\"fieldclass\" type=\"url\" name=\"_d4g_giftimage\" /></td></tr><tr><td class=\"leftdescription\">\n
@@ -591,7 +620,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
           <table class=\"tabledescription\"><tr><td class=\"leftdescription\">
           " . $S[43] . "</td><td class=\"rightdescription\">\n";
 
-      displaySelectGifts($gifts);
+      displaySelectGifts($doodle4gift, $gifts);
 
       echo "\n
           </td></tr>

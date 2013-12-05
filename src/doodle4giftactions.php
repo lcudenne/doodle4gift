@@ -384,6 +384,8 @@ function actionAddWish($doodle4gift, $gifts, $profile, $login) {
       isset($_POST["_d4g_giftprice"]) && !empty($_POST["_d4g_giftprice"]) &&
       is_numeric($_POST["_d4g_giftprice"]) && ($_POST["_d4g_giftprice"] > 0)) {
 
+    $surprise = isset($_POST["_d4g_giftsurprise"]);
+
     $desc = "";
     if (isset($_POST["_d4g_giftdesc"]) && !empty($_POST["_d4g_giftdesc"])) {
       $desc = $_POST["_d4g_giftdesc"];
@@ -398,7 +400,7 @@ function actionAddWish($doodle4gift, $gifts, $profile, $login) {
     }
 
     $gift = newGift($gifts, $_POST["_d4g_giftname"], $_POST["_d4g_giftprice"],
-                    $desc, $link, $image);
+                    $desc, $link, $image, $surprise);
 
     if ($gift) {
       $wish = newWish($profile, $gift, $login);
@@ -423,7 +425,7 @@ function actionAddExistingWish($doodle4gift, $gifts, $profile, $login) {
     $gift = getGift($gifts, $_POST["_d4g_giftid"]);
 
     if ($gift) {
-      $wish = newWish($profile, $gift, $login);
+      $wish = newWish($profile, $gift, $login, FALSE);
     }
 
     if ($wish) {
@@ -446,6 +448,8 @@ function actionModifyWish($doodle4gift, $gifts, $wish, $login) {
         isset($_POST["_d4g_giftprice"]) && !empty($_POST["_d4g_giftprice"]) &&
         is_numeric($_POST["_d4g_giftprice"]) && ($_POST["_d4g_giftprice"] > 0)) {
 
+      $surprise = isset($_POST["_d4g_giftsurprise"]);
+
       $desc = "";
       if (isset($_POST["_d4g_giftdesc"]) && !empty($_POST["_d4g_giftdesc"])) {
         $desc = $_POST["_d4g_giftdesc"];
@@ -462,7 +466,7 @@ function actionModifyWish($doodle4gift, $gifts, $wish, $login) {
       if ($gift) {
 
         modifyGift($gift, $_POST["_d4g_giftname"], $_POST["_d4g_giftprice"],
-                   $desc, $link, $image);
+                   $desc, $link, $image, $surprise);
 
 	setWishCreator($wish, $login);
 
@@ -600,13 +604,13 @@ function performAction($doodle4gift, $profiles, $gifts) {
     switch ($action) {
     case "login":
       actionLogin($login);
-      displayProfilesGifts($login, $profiles, $gifts);
+      displayProfilesGifts($doodle4gift, $login, $profiles, $gifts);
       break;
     case "logout":
       actionLogout();
       break;
     case "setlanguage":
-      displayProfilesGifts($login, $profiles, $gifts);
+      displayProfilesGifts($doodle4gift, $login, $profiles, $gifts);
       break;
     case "newprofile":
       actionNewProfile($doodle4gift, $profiles);
@@ -698,7 +702,7 @@ function performAction($doodle4gift, $profiles, $gifts) {
     }
 
   } else {
-    displayProfilesGifts($login, $profiles, $gifts);
+    displayProfilesGifts($doodle4gift, $login, $profiles, $gifts);
   }
 
   displayfooter();

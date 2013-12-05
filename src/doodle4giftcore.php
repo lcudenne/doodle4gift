@@ -23,7 +23,7 @@
 
 
 $SCRIPTNAME = "index.php5";
-$SCRIPTVERSION = "Wed, 04 Dec 2013 23:42:00 +0100";
+$SCRIPTVERSION = "Thu, 05 Dec 2013 16:42:00 +0100";
 $DEBUG = FALSE;
 
 $DATAPATH = "data/";
@@ -484,7 +484,7 @@ function getGifts ($doodle4gift) {
 }
 
 /* ------------------------------------------------------------------------------------ */
-function getGiftsByProfile ($gifts, $profile) {
+function getGiftsByProfile ($doodle4gift, $gifts, $profile) {
 
   $res = array();
 
@@ -496,7 +496,9 @@ function getGiftsByProfile ($gifts, $profile) {
     
     $gift = getGift($gifts, $attrs["gift"]);
     if ($gift) {
-      array_push($res, $gift);
+      if (!getGiftSurprise($doodle4gift, $gift)) {
+	array_push($res, $gift);
+      }
     }
 
   }
@@ -658,7 +660,6 @@ function getWishCreator($doodle4gift, $profiles, $wish, $profile) {
 }
 
 
-
 /* ------------------------------------------------------------------------------------ */
 function newContributor($wish, $profile, $amount) {
 
@@ -704,7 +705,7 @@ function setAmount($contributor, $amount) {
 
 
 /* ------------------------------------------------------------------------------------ */
-function newGift($gifts, $name, $price, $desc, $link, $image) {
+function newGift($gifts, $name, $price, $desc, $link, $image, $surprise) {
 
   $gift = NULL;
   $present = getGiftByName($gifts, $name);
@@ -717,6 +718,11 @@ function newGift($gifts, $name, $price, $desc, $link, $image) {
     $gift->addAttribute("price", $price);
     $gift->addAttribute("link", $link);
     $gift->addAttribute("image", $image);
+    if ($surprise) {
+      $gift->addAttribute("surprise", "TRUE");
+    } else {
+      $gift->addAttribute("surprise", "FALSE");
+    }
     $gift[0] = $desc;
 
     dbg("New gift added " . $id . " " . $name);
@@ -729,7 +735,27 @@ function newGift($gifts, $name, $price, $desc, $link, $image) {
 }
 
 /* ------------------------------------------------------------------------------------ */
-function modifyGift($gift, $name, $price, $desc, $link, $image) {
+function getGiftSurprise($doodle4gift, $gift) {
+
+  $surprise = FALSE;
+
+  $attrs = $gift->attributes();
+
+  if (isset($attrs["surprise"])) {
+    if (strcasecmp($attrs["surprise"], "TRUE") == 0) {
+      $surprise = TRUE;
+    }
+  } else {
+    $gift->addAttribute("surprise", "FALSE");
+    saveXmlDataFile($doodle4gift);
+  }
+
+  return $surprise;
+}
+
+
+/* ------------------------------------------------------------------------------------ */
+function modifyGift($gift, $name, $price, $desc, $link, $image, $surprise) {
 
   $attrs = $gift->attributes();
 
@@ -744,6 +770,12 @@ function modifyGift($gift, $name, $price, $desc, $link, $image) {
   }
   if ($image) {
     $attrs["image"] = $image;
+  }
+
+  if ($surprise) {
+    $attrs["surprise"] = "TRUE";
+  } else {
+    $attrs["surprise"] = "FALSE";
   }
 
 }
