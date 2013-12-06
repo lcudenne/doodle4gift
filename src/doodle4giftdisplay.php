@@ -380,7 +380,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
         if ($percentpaid > 100) {
           $percentpaid = 100;
         }
-	print "<div class=\"percentbar\" style=\"width:200px\" title=\"Price: ". $giftattrs["price"] . "\">\n
+	print "<div class=\"percentbar\" style=\"width:200px\" title=\"" . $S[30] . " ". $giftattrs["price"] . "\">\n
                 <div class=\"percentbaramount\" style=\"width:" . ($percent * 2) . "px\" title=\"" . $S[34] . " ". $sum . "\">\n
                  <div class=\"percentbarpaid\" style=\"width:" . ($percentpaid * 2) . "px\" title=\"" . $S[35] . " ". $paid . "\"></div>\n
                 </div>\n
