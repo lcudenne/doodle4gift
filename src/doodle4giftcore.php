@@ -23,7 +23,7 @@
 
 
 $SCRIPTNAME = "index.php5";
-$SCRIPTVERSION = "Thu, 05 Dec 2013 16:42:00 +0100";
+$SCRIPTVERSION = "Fri, 06 Dec 2013 16:42:00 +0100";
 $DEBUG = FALSE;
 
 $DATAPATH = "data/";
@@ -657,6 +657,22 @@ function getWishCreator($doodle4gift, $profiles, $wish, $profile) {
   }
 
   return $creator;
+}
+
+
+/* ------------------------------------------------------------------------------------ */
+function getWishLeader($profiles, $wish) {
+
+  $leader = FALSE;
+
+  $attrsw = $wish->attributes();
+
+  if (!empty($attrsw["leader"])) {
+    $leader = getProfile($profiles, $attrsw["leader"]);
+  }
+
+  return $leader;
+
 }
 
 

@@ -312,7 +312,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 
       $doeditwish = ($editwish &&
                      ($editwishattrs["id"] == $wishattrs["id"]) &&
-                     (($profile == $login) || ($creator == $login)));
+                     (($profile == $login) || ($creator == $login) || ($leader == $login)));
 
       print "<a name=\"#" . $wishattrs["id"] . "\"></a>
              <div class=\"wish\" id=\"" . $wishattrs["id"] . "\">\n
@@ -333,7 +333,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
       print "</td><td class=\"rightdescription\">";
 
 
-      if (($profile == $login) || ($creator == $login)) {
+      if (($profile == $login) || ($creator == $login) || ($leader == $login)) {
 
         if ($doeditwish) {
 

@@ -662,7 +662,8 @@ function performAction($doodle4gift, $profiles, $gifts) {
       $profile = actionRetrieveProfile($profiles);
       $wish = actionRetrieveWish($profile);
       $creator = getWishCreator($doodle4gift, $profiles, $wish, $profile);
-      if (($profile == $login) || ($creator == $login)) {
+      $leader = getWishLeader($profiles, $wish);
+      if (($profile == $login) || ($creator == $login) || ($leader == $login)) {
 	displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $gifts, $wish);
       } else {
 	displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
@@ -672,7 +673,8 @@ function performAction($doodle4gift, $profiles, $gifts) {
       $profile = actionRetrieveProfile($profiles);
       $wish = actionRetrieveWish($profile);
       $creator = getWishCreator($doodle4gift, $profiles, $wish, $profile);
-      if (($profile == $login) || ($creator == $login)) {
+      $leader = getWishLeader($profiles, $wish);
+      if (($profile == $login) || ($creator == $login) || ($leader == $login)) {
 	actionModifyWish($doodle4gift, $gifts, $wish, $login);
       }
       displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
