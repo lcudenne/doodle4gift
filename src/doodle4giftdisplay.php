@@ -272,20 +272,32 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
    
     $profileattrs = $profile->attributes();
 
+    $wishlist = getWishlist($profile);
+    $wishchildren = $wishlist->children();
+
     print "<div class=\"elementlistcenter\"><div class=\"elementlist\"><div class=\"elementleft\">\n";
 
     displayProfile($doodle4gift, $login, $gifts, $profile);
 
-    print "</div><div class=\"elementright\">\n";
+    $contlist = getContributions($profiles, $profile);
 
-    $wishlist = getWishlist($profile);
+    if (empty($wishchildren) && empty($contlist)) {
+      print "<br />";
+      print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . $wishattrs["id"] . "\">\n";
+      print " <input type=\"hidden\" name=\"_d4g_action\" value=\"deleteprofile\" />\n
+              <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
+              <input class=\"inputclass\" type=\"submit\" value=\"" . $S[33] . "\" />\n";
+      print "</form>\n";
+    }
+
+    print "</div><div class=\"elementright\">\n";
 
 
     /**
      * For each wish
      */
 
-    foreach($wishlist->children() as $wish) {
+    foreach($wishchildren as $wish) {
 
       $iscont = FALSE;
 
@@ -649,14 +661,24 @@ function displayFooter() {
   global $SCRIPTNAME;
 
   print "<div class=\"footerflag\">\n
-          <div class=\"languageflag\">
+          <div class=\"controlflag\">
            <a href=\"" . $SCRIPTNAME . "?action=setlanguage&amp;language=english\">
-            <img src=\"img/flag_english.png\" />
+            <img class=\"controlimg\" src=\"img/flag_english.png\" />
            </a>
           </div>
-          <div class=\"languageflag\">
+          <div class=\"controlflag\">
            <a href=\"" . $SCRIPTNAME . "?action=setlanguage&amp;language=francais\">
-            <img src=\"img/flag_francais.png\" />
+            <img class=\"controlimg\" src=\"img/flag_francais.png\" />
+           </a>
+          </div>
+          <div class=\"controlflag\">
+           <a href=\"" . $SCRIPTNAME . "\">
+            <img class=\"controlimg\" src=\"img/home.png\" />
+           </a>
+          </div>
+          <div class=\"controlflag\">
+           <a href=\"#top\">
+            <img class=\"controlimg\" src=\"img/arrow_up.png\" />
            </a>
           </div>
          </div>

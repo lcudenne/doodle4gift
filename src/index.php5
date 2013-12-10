@@ -40,6 +40,8 @@ $gifts = getGifts($doodle4gift);
 </head>
 <body>
 
+<a name="#top"></a>
+
 <?php
 
 performAction($doodle4gift, $profiles, $gifts);

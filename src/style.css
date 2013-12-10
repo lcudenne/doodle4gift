@@ -304,8 +304,12 @@ img:hover{
     z-index:0;
 }
 
-.languageflag{
+.controlflag{
     float: left;
+}
+
+.controlimg{
+    height: 32px;
 }
 
 .surprise {

@@ -615,6 +615,12 @@ function performAction($doodle4gift, $profiles, $gifts) {
     case "newprofile":
       actionNewProfile($doodle4gift, $profiles);
       break;
+    case "deleteprofile":
+      $profile = actionRetrieveProfile($profiles);
+      deleteProfile($profiles, $profile);
+      saveXmlDataFile($doodle4gift);
+      displayProfilesGifts($doodle4gift, $login, $profiles, $gifts);
+      break;
     case "showprofile":
       $profile = actionRetrieveProfile($profiles);
       displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
@@ -681,8 +687,10 @@ function performAction($doodle4gift, $profiles, $gifts) {
       break;
     case "deletewish":
       $profile = actionRetrieveProfile($profiles);
-      if ($profile == $login) {
-	$wish = actionRetrieveWish($profile);
+      $wish = actionRetrieveWish($profile);
+      $creator = getWishCreator($doodle4gift, $profiles, $wish, $profile);
+      $leader = getWishLeader($profiles, $wish);
+      if (($profile == $login) || ($creator == $login) || ($leader == $login)) {
 	actionDeleteWish($doodle4gift, $profiles, $gifts, $wish);
       }
       displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);

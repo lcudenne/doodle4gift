@@ -23,7 +23,7 @@
 
 
 $SCRIPTNAME = "index.php5";
-$SCRIPTVERSION = "Fri, 06 Dec 2013 16:42:00 +0100";
+$SCRIPTVERSION = "Tue, 10 Dec 2013 16:42:00 +0100";
 $DEBUG = FALSE;
 
 $DATAPATH = "data/";
@@ -597,6 +597,7 @@ function newProfile($profiles, $name, $email, $avatar) {
 
 }
 
+
 /* ------------------------------------------------------------------------------------ */
 function newWish($profile, $gift, $login) {
 
@@ -650,6 +651,9 @@ function getWishCreator($doodle4gift, $profiles, $wish, $profile) {
   $attrsp = $profile->attributes();
 
   if (isset($attrsw["creator"])) {
+    if (empty($attrsw["creator"])) {
+      $attrsw["creator"] = $attrsp["id"];
+    }
     $creator = getProfile($profiles, $attrsw["creator"]);
   } else {
     $wish->addAttribute("creator", $attrsp["id"]);
@@ -672,6 +676,71 @@ function getWishLeader($profiles, $wish) {
   }
 
   return $leader;
+
+}
+
+
+
+/* ------------------------------------------------------------------------------------ */
+function getContributions($profiles, $contprofile) {
+
+  $res = array();
+
+  foreach($profiles->children() as $profile) {
+ 
+    $wishlist = getWishlist ($profile);
+
+    foreach($wishlist->children() as $wish) {
+
+      $contributionlist = getContributors($wish);
+
+      foreach($contributionlist->children() as $contribution) {
+
+	$attrscontribution = $contribution->attributes();
+
+	$contributor = getProfile($profiles, $attrscontribution["profile"]);
+
+	if ($contributor == $contprofile) {
+	  array_push($res, $contribution);
+	  break;
+	}
+
+      }
+
+    }
+
+  }
+  
+  return $res;
+
+}
+
+/* ------------------------------------------------------------------------------------ */
+function clearCreatorLeader($profiles, $clear) {
+
+  $attrs = $clear->attributes();
+  $id = $attrs["id"];
+
+  foreach($profiles->children() as $profile) {
+ 
+    $wishlist = getWishlist ($profile);
+
+    foreach($wishlist->children() as $wish) {
+
+      $attrsw = $wish->attributes();
+
+      if (isset($attrsw["creator"]) &&
+	  (strcasecmp($attrsw["creator"], $id) == 0)) {
+	$attrsw["creator"] = "";
+      }
+
+      if (strcasecmp($attrsw["leader"], $id) == 0) {
+	$attrsw["leader"] = "";
+      }
+
+    }
+
+  }
 
 }
 
@@ -835,6 +904,21 @@ function deleteWish($profiles, $gifts, $wish) {
 
 }
 
+/* ------------------------------------------------------------------------------------ */
+function deleteProfile($profiles, $profile) {
+
+  if ($profile) {
+
+    $contributions = getContributions($profiles, $profile);
+
+    if (empty($contributions)) {
+      clearCreatorLeader($profiles, $profile);
+      deleteNode($profile);
+    }
+
+  }
+
+}
 
 
 
