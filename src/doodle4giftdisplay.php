@@ -380,21 +380,37 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 
       if ($profile != $login) {
 
+	$price = $giftattrs["price"];
+	$totalprice = $price;
         $sum = 0;
         $paid = 0;
 	getWishSum($wish, $sum, $paid);
 
-        $percent = round(($sum * 100) / $giftattrs["price"]);
+	if ($sum > $totalprice) {
+	  $totalprice = $sum;
+	}
+
+        $percent = round(($sum * 100) / $totalprice);
         if ($percent > 100) {
           $percent = 100;
         }
-        $percentpaid = round(($paid * 100) / $giftattrs["price"]);
+        $percentpaid = round(($paid * 100) / $totalprice);
         if ($percentpaid > 100) {
           $percentpaid = 100;
         }
 	print "<div class=\"percentbar\" style=\"width:200px\" title=\"" . $S[30] . " ". $giftattrs["price"] . "\">\n
                 <div class=\"percentbaramount\" style=\"width:" . ($percent * 2) . "px\" title=\"" . $S[34] . " ". $sum . "\">\n
-                 <div class=\"percentbarpaid\" style=\"width:" . ($percentpaid * 2) . "px\" title=\"" . $S[35] . " ". $paid . "\"></div>\n
+                 <div class=\"percentbarpaid\" style=\"width:" . ($percentpaid * 2) . "px\" title=\"" . $S[35] . " ". $paid . "\">";
+	
+	if (($totalprice > $price) && ($paid >= $price)) {
+	  $percentprice = round(($price * 100) / $totalprice);
+	  if ($percentprice > 100) {
+	    $percentprice = 100;
+	  }
+	  print "<div class=\"percentbarprice\" style=\"width:" . ($percentprice * 2) . "px\" title=\"" . $S[30] . " ". $price . "\"></div>\n";
+	}
+
+	print "  </div>\n
                 </div>\n
                </div>\n";       
 
@@ -569,12 +585,17 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
           
         } else {
           
+	  $suggestedcont = ($giftattrs["price"] - $sum);
+	  if ($suggestedcont < 0) {
+	    $suggestedcont = 0;
+	  }
+
 	  echo "<div class=\"amount\">
 	    <form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . $wishattrs["id"] . "\">\n
              <input type=\"hidden\" name=\"_d4g_action\" value=\"addcontributor\" />\n
              <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
              <input type=\"hidden\" name=\"_d4g_wish\" value=\"".$wishattrs["id"]."\" />\n
-             <input class=\"inputclass\" type=\"number\" name=\"_d4g_amount\" placeholder=\"". ($giftattrs["price"] - $sum)
+             <input class=\"inputclass\" type=\"number\" name=\"_d4g_amount\" placeholder=\"". $suggestedcont
 	    . "\" required /><input class=\"inputclass\" type=\"submit\" value=\"" . $S[41] . "\" />\n
             </form>\n</div>";
 
