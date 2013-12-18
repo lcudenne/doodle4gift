@@ -89,7 +89,7 @@ function displayLogin($doodle4gift, $login) {
     echo "
 <form method=\"POST\" action=\"" . $SCRIPTNAME . "\">\n
  <input type=\"hidden\" name=\"_d4g_action\" value=\"logout\" />\n
- " . $S[14] . ", " . $attrs["name"] . " <input type=\"submit\" value=\"" . $S[15] . "\" />\n
+ " . $S[14] . ", " . stripslashes($attrs["name"]) . " <input type=\"submit\" value=\"" . $S[15] . "\" />\n
 </form>\n
 </div></div></div>\n";
     
@@ -199,7 +199,7 @@ function actionNewProfile($doodle4gift, $profiles) {
     if ($profile) {
       saveXmlDataFile($doodle4gift);
     } else {
-    echo "<div class=\"message\">Profile " . $name . " " . $email  . " " . $S[16] . "</div>\n";
+      echo "<div class=\"message\">Profile " . stripslashes($name) . " " . $email  . " " . $S[16] . "</div>\n";
   }
 
   } else {
@@ -210,20 +210,20 @@ function actionNewProfile($doodle4gift, $profiles) {
 
     $attrs = $profile->attributes();
     $password = $attrs["password"];
-    echo "<div class=\"message\">Profile " . $name 
+    echo "<div class=\"message\">Profile " . stripslashes($name) 
       . " " . $S[17] . ".<br />\n " . $S[18] . " <a href=\"" . $SCRIPTNAME . "?action=login&amp;password="
       . $password . "\">" . $password . "</a></div>\n";
     
     if ($email) {
       $subject = $S[19];
-      $msg = $S[20] . " " . $name . ",\n\n" . $S[21] . "\n" . $S[22] . " " . $password . "\n\n" . $S[23] . "\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "?action=login&password=" . $password . "\n\n" . $S[24] . "\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "\n\n" . $S[25] . ",\nDoodle4Gift.\n";
+      $msg = $S[20] . " " . stripslashes($name) . ",\n\n" . $S[21] . "\n" . $S[22] . " " . $password . "\n\n" . $S[23] . "\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "?action=login&password=" . $password . "\n\n" . $S[24] . "\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "\n\n" . $S[25] . ",\nDoodle4Gift.\n";
       $headers = "From: Doodle4Gift <noreply@" . $_SERVER["SERVER_NAME"] . ">"."\r\n";
       mail($email, $subject, $msg, $headers);
       echo "<div class=\"message\">" . $S[26] . " " . $email . "</div>\n";
     }
 
   } else {
-    echo "<div class=\"message\">" . $S[27] . " " . $name . " " . $email  . "</div>\n";
+    echo "<div class=\"message\">" . $S[27] . " " . stripslashes($name) . " " . $email  . "</div>\n";
   }
 
 }

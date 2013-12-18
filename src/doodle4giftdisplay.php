@@ -53,7 +53,7 @@ function displayProfile($doodle4gift, $login, $gifts, $profile) {
   }
 
   print "<div class=\"elementname\">"
-    . $attrs["name"] . "</div></div>\n";
+    . stripslashes($attrs["name"]) . "</div></div>\n";
 
 }
 
@@ -65,7 +65,7 @@ function displaySmallProfile($profile) {
   print " <div class=\"smallelement\" id=\"" . $attrs["id"] .
     "\" ><a href=\"" . $SCRIPTNAME . "?action=showprofile&amp;profile=" . $attrs["id"] .
     "\"><img class=\"smallelementimg\" src=\"img/avatar_" . $attrs["avatar"] . ".png\" /><br /><div class=\"elementname\">"
-    . $attrs["name"] . "</div></a></div>\n";
+    . stripslashes($attrs["name"]) . "</div></a></div>\n";
 
 }
 
@@ -80,7 +80,7 @@ function displaySmallProfileWish($profile, $wish) {
     "\" ><a href=\"" . $SCRIPTNAME . "?action=showprofile&amp;profile=" . $attrs["id"] .
     "#" . $attrsw["id"] . "\"><img class=\"smallelementimg\" src=\"img/avatar_" .
     $attrs["avatar"] . ".png\" /><br /><div class=\"elementname\">" .
-    $attrs["name"] . "</div></a></div>\n";
+    stripslashes($attrs["name"]) . "</div></a></div>\n";
 
 }
 
@@ -173,7 +173,7 @@ function displayGift($profiles, $gift) {
 
   print "</div>
          <div class=\"elementname\">" .
-    $attrs["name"] . "</div>";
+    stripslashes($attrs["name"]) . "</div>";
 
   print "</div>\n";
 
@@ -202,7 +202,7 @@ function displaySmallGift($gift) {
   }
 
   print "<br /><div class=\"elementname\">"
-    . $attrs["name"] . "</div></div>\n";
+    . stripslashes($attrs["name"]) . "</div></div>\n";
 
 }
 
@@ -229,7 +229,7 @@ function displaySelectGifts($doodle4gift, $gifts) {
   foreach($gifts->children() as $gift) {
     if (!getGiftSurprise($doodle4gift, $gift)) {
       $attrs = $gift->attributes();
-      print " <option value=\"" . $attrs["id"] . "\">" . $attrs["name"]
+      print " <option value=\"" . $attrs["id"] . "\">" . stripslashes($attrs["name"])
 	. " (" . $S[30] . " " . $attrs["price"] . ")</option>\n";
     }
   }
@@ -424,7 +424,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
         echo "
            <tr><td class=\"leftdescription\">
           " . $S[7] . " (*)</td><td class=\"rightdescription\">
-          <input class=\"fieldclass\" type=\"text\" name=\"_d4g_giftname\" size=\"15\" required value=\"" . $giftattrs["name"] . "\" />
+          <input class=\"fieldclass\" type=\"text\" name=\"_d4g_giftname\" size=\"15\" required value=\"" . stripslashes($giftattrs["name"]) . "\" />
           </td></tr><tr><td class=\"leftdescription\">\n
           " . $S[30] . " (*)</td><td class=\"rightdescription\">
           <input type=\"number\" name=\"_d4g_giftprice\" size=\"3\" required value=\"" . $giftattrs["price"] . "\" /> ";
@@ -439,7 +439,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 
 	echo "</td></tr><tr><td class=\"leftdescription\">\n
           " . $S[37] . "</td><td class=\"rightdescription\">
-          <textarea class=\"fieldclass\" name=\"_d4g_giftdesc\" >" . $gift[0] . "</textarea>
+          <textarea class=\"fieldclass\" name=\"_d4g_giftdesc\" >" . stripslashes($gift[0]) . "</textarea>
           </td></tr><tr><td class=\"leftdescription\">\n
           " . $S[38] . "</td><td class=\"rightdescription\">
           <input class=\"fieldclass\" type=\"url\" name=\"_d4g_giftlink\" value=\"" . $giftattrs["link"] . "\" />
@@ -453,9 +453,9 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 
         print "<tr><td class=\"leftdescription\">" . $S[7] . "</td><td class=\"rightdescription\">";
         if (!empty($giftattrs["link"])) {
-          print "<a href=\"" . $giftattrs["link"] . "\" >" . $giftattrs["name"] . "</a>";
+          print "<a href=\"" . $giftattrs["link"] . "\" >" . stripslashes($giftattrs["name"]) . "</a>";
         } else {
-          print $giftattrs["name"];
+          print stripslashes($giftattrs["name"]);
         }
         print "</td></tr>";
         print "<tr><td class=\"leftdescription\">" . $S[30] . "</td><td class=\"rightdescription\">" . $giftattrs["price"];
@@ -463,7 +463,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 	  print " <div class=\"surprise\">" . $S[47] . "</div><img class=\"verysmallelementimg\" src=\"img/gift.png\" />";
 	}
 	print "</td></tr>";
-        print "<tr><td class=\"leftdescription\">" . $S[37] . "</td><td class=\"rightdescription\">" . $gift[0] . "</td></tr>";
+        print "<tr><td class=\"leftdescription\">" . $S[37] . "</td><td class=\"rightdescription\">" . stripslashes($gift[0]) . "</td></tr>";
 
 
       } /* doeditwish */

@@ -23,7 +23,7 @@
 
 
 $SCRIPTNAME = "index.php5";
-$SCRIPTVERSION = "Tue, 17 Dec 2013 16:42:00 +0100";
+$SCRIPTVERSION = "Wed, 18 Dec 2013 10:42:00 +0100";
 $DEBUG = FALSE;
 
 $DATAPATH = "data/";
@@ -569,7 +569,7 @@ function newProfile($profiles, $name, $email, $avatar) {
   if ($present) {
 
     $attrs = $present->attributes();
-    $pname = $attrs["name"];
+    $pname = stripslashes($attrs["name"]);
     $password = $attrs["password"];
 
     if ($email) {
