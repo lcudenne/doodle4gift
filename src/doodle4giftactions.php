@@ -121,20 +121,20 @@ function displayLogin($doodle4gift, $login) {
   </td></tr><tr><td colspan=\"2\">
 
   <table><tr>
-   <td><img class=\"smallelementimg\" src=\"img/avatar_alien\" /></td>
-   <td><img class=\"smallelementimg\" src=\"img/avatar_astronaut\" /></td>
-   <td><img class=\"smallelementimg\" src=\"img/avatar_sportsman\" /></td>
-   <td><img class=\"smallelementimg\" src=\"img/avatar_robotess\" /></td>
+   <td><img class=\"smallelementimg\" src=\"img/avatar_alien.png\" /></td>
+   <td><img class=\"smallelementimg\" src=\"img/avatar_astronaut.png\" /></td>
+   <td><img class=\"smallelementimg\" src=\"img/avatar_sportsman.png\" /></td>
+   <td><img class=\"smallelementimg\" src=\"img/avatar_robotess.png\" /></td>
   </tr><tr>
    <td><input type=\"radio\" name=\"_d4g_avatar\" value=\"alien\" checked />\n</td>
    <td><input type=\"radio\" name=\"_d4g_avatar\" value=\"astronaut\" />\n</td>
    <td><input type=\"radio\" name=\"_d4g_avatar\" value=\"sportsman\" />\n</td>
    <td><input type=\"radio\" name=\"_d4g_avatar\" value=\"robotess\" />\n</td>
   </tr><tr>
-   <td><img class=\"smallelementimg\" src=\"img/avatar_aphrodite\" /></td>
-   <td><img class=\"smallelementimg\" src=\"img/avatar_contractor\" /></td>
-   <td><img class=\"smallelementimg\" src=\"img/avatar_ninja\" /></td>
-   <td><img class=\"smallelementimg\" src=\"img/avatar_teacher\" /></td>
+   <td><img class=\"smallelementimg\" src=\"img/avatar_aphrodite.png\" /></td>
+   <td><img class=\"smallelementimg\" src=\"img/avatar_contractor.png\" /></td>
+   <td><img class=\"smallelementimg\" src=\"img/avatar_ninja.png\" /></td>
+   <td><img class=\"smallelementimg\" src=\"img/avatar_teacher.png\" /></td>
   </tr><tr>
    <td><input type=\"radio\" name=\"_d4g_avatar\" value=\"aphrodite\" />\n</td>
    <td><input type=\"radio\" name=\"_d4g_avatar\" value=\"contractor\" />\n</td>
