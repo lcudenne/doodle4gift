@@ -23,7 +23,7 @@
 
 
 $SCRIPTNAME = "index.php5";
-$SCRIPTVERSION = "Wed, 18 Dec 2013 10:42:00 +0100";
+$SCRIPTVERSION = "Wed, 05 Feb 2014 10:42:00 +0100";
 $DEBUG = FALSE;
 
 $DATAPATH = "data/";
@@ -38,6 +38,15 @@ function dbg ($message) {
 
   if ($DEBUG) {
     print("<p class=\"debug\">$message</p>");
+  }
+
+}
+
+/* ------------------------------------------------------------------------------------ */
+function is_uniqid ($id) {
+
+  if (preg_match('/[^A-Za-z0-9]/', $id)) {
+    exit("Bad identifier.");
   }
 
 }
@@ -188,6 +197,8 @@ function setLanguageProfile($doodle4gift, $profile) {
 /* ------------------------------------------------------------------------------------ */
 function getProfile ($profiles, $id) {
 
+  is_uniqid ($id);
+
   $profile = FALSE;
 
   $query = $profiles->xpath("profile[@id='" . $id . "']");
@@ -203,6 +214,8 @@ function getProfile ($profiles, $id) {
 
 /* ------------------------------------------------------------------------------------ */
 function getProfileByPassword ($profiles, $password) {
+
+  is_uniqid ($password);
 
   $profile = FALSE;
 
@@ -313,6 +326,8 @@ function getWishlist ($profile) {
 /* ------------------------------------------------------------------------------------ */
 function getWish ($profile, $id) {
 
+  is_uniqid ($id);
+
   $wish = FALSE;
   $wishlist = getWishlist ($profile);
 
@@ -350,6 +365,8 @@ function getWishByGift ($profile, $gift) {
 /* ------------------------------------------------------------------------------------ */
 function getWishByGiftId ($profile, $giftid) {
 
+  is_uniqid ($giftid);
+
   $wish = FALSE;
   $wishlist = getWishlist ($profile);
 
@@ -366,6 +383,8 @@ function getWishByGiftId ($profile, $giftid) {
 
 /* ------------------------------------------------------------------------------------ */
 function getWishByGiftIdRaw ($profile, $giftid) {
+
+  is_uniqid ($giftid);
 
   $wish = FALSE;
   $wishlist = getWishlist ($profile);
@@ -414,6 +433,8 @@ function getWishSum ($wish, &$sum, &$paid) {
 /* ------------------------------------------------------------------------------------ */
 function nbGiftWish ($profiles, $giftid) {
 
+  is_uniqid ($giftid);
+
   $nbwish = 0;
   $wish = FALSE;
 
@@ -441,6 +462,8 @@ function getContributors ($wish) {
 
 /* ------------------------------------------------------------------------------------ */
 function getContributor ($wish, $id) {
+
+  is_uniqid ($id);
 
   $contributor = FALSE;
   $contributors = getContributors ($wish);
@@ -509,6 +532,8 @@ function getGiftsByProfile ($doodle4gift, $gifts, $profile) {
 
 /* ------------------------------------------------------------------------------------ */
 function getGift ($gifts, $id) {
+
+  is_uniqid ($id);
 
   $gift = FALSE;
 

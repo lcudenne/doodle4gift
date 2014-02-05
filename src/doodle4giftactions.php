@@ -546,6 +546,7 @@ function actionSetLanguagePre() {
 
   if (isset($_GET["language"]) && !empty($_GET["language"])) {
     $LANGUAGE = $_GET["language"];
+    is_uniqid($LANGUAGE);
     $S = $LANGUAGES[$LANGUAGE];
   }
 
@@ -708,7 +709,7 @@ function performAction($doodle4gift, $profiles, $gifts) {
       displayProfileWishlist($doodle4gift, $login, $profile, $profiles, $gifts);
       break;
     default:
-      dbg("Unknown action " . $action);
+      dbg("Unknown action");
     }
 
   } else {
