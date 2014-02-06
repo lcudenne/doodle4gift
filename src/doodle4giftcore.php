@@ -23,7 +23,7 @@
 
 
 $SCRIPTNAME = "index.php5";
-$SCRIPTVERSION = "Wed, 05 Feb 2014 10:42:00 +0100";
+$SCRIPTVERSION = "Thu, 06 Feb 2014 10:42:00 +0100";
 $DEBUG = FALSE;
 
 $DATAPATH = "data/";
@@ -33,11 +33,28 @@ $SIMILAR_THRESHOLD = 80;
 
 
 /* ------------------------------------------------------------------------------------ */
+function out ($string) {
+
+  /* use this function to protect from XSS */
+  return htmlspecialchars(stripslashes($string), ENT_QUOTES, 'UTF-8');
+
+}
+
+/* ------------------------------------------------------------------------------------ */
+function outurl ($string) {
+
+  /* use this function to output URL while protecting from XSS */
+  return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+
+}
+
+
+/* ------------------------------------------------------------------------------------ */
 function dbg ($message) {
   global $DEBUG;
 
   if ($DEBUG) {
-    print("<p class=\"debug\">$message</p>");
+    echo("<p class=\"debug\">" . out($message) . "</p>");
   }
 
 }
@@ -46,11 +63,10 @@ function dbg ($message) {
 function is_uniqid ($id) {
 
   if (preg_match('/[^A-Za-z0-9]/', $id)) {
-    exit("Bad identifier.");
+    exit("Bad identifier (" . out($id) . ")");
   }
 
 }
-
 
 
 /* ------------------------------------------------------------------------------------ */
@@ -62,7 +78,7 @@ function createEmptyDataFile () {
   $fileHandle = fopen($DATAFILENAME, 'w');
 
   if ($fileHandle == FALSE) {
-    exit("Cannot create file " . $DATAFILENAME . ". Please check file access permissions.");
+    exit("Cannot create file " . out($DATAFILENAME) . ". Please check file access permissions.");
   }
 
   fwrite($fileHandle, "<?xml version=\"1.0\"?>\n");
@@ -88,7 +104,7 @@ function openDataFile () {
   if ($dres == FALSE) {
     $dres = mkdir($DATAPATH, 0755);
     if ($dres == FALSE) {
-      exit("Cannot access " . $DATAPATH . ". Please check file access permissions.");
+      exit("Cannot access " . out($DATAPATH) . ". Please check file access permissions.");
     }
   }
 
@@ -116,7 +132,7 @@ function loadXmlDataFile () {
   $xml = simplexml_load_file($DATAFILENAME);
 
   if ($xml == FALSE) {
-    exit("Cannot load xml file " . $DATAFILENAME . ". Please repair or remove file.");
+    exit("Cannot load xml file " . out($DATAFILENAME) . ". Please repair or remove file.");
   }
 
   dbg("Xml file " . $DATAFILENAME . " loaded");
@@ -128,7 +144,7 @@ function loadXmlDataFile () {
   $filedate = new DateTime($version);
 
   if ($filedate > $scriptdate) {
-    exit("Cannot load xml file " . $DATAFILENAME . ". This script version is too old.");
+    exit("Cannot load xml file " . out($DATAFILENAME) . ". This script version is too old.");
   }
 
   return $xml;
@@ -150,7 +166,7 @@ function saveXmlDataFile($xml) {
   $res = $dom->save($DATAFILENAME);
 
   if ($res == FALSE) {
-    exit("Cannot save xml file " . $DATAFILENAME . ". Please check file access permissions.");
+    exit("Cannot save xml file " . out($DATAFILENAME) . ". Please check file access permissions.");
   }
 
   dbg("Xml file " . $DATAFILENAME . " saved");
@@ -594,15 +610,15 @@ function newProfile($profiles, $name, $email, $avatar) {
   if ($present) {
 
     $attrs = $present->attributes();
-    $pname = stripslashes($attrs["name"]);
-    $password = $attrs["password"];
+    $pname = out($attrs["name"]);
+    $password = out($attrs["password"]);
 
     if ($email) {
       $subject = $S[45];
       $msg = $S[20] . " " . $pname . ",\n\n" . $S[22] . " " . $password . "\n\n" . $S[23] . "\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "?action=login&password=" . $password . "\n\n" . $S[24] . "\nhttp://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] . "\n\n" . $S[25] . ",\nDoodle4Gift.\n";
       $headers = "From: Doodle4Gift <noreply@" . $_SERVER["SERVER_NAME"] . ">"."\r\n";
       mail($email, $subject, $msg, $headers);
-      echo "<div class=\"message\">" . $S[46] . " " . $email . "</div>\n";
+      echo "<div class=\"message\">" . $S[46] . " " . out($email) . "</div>\n";
     }
 
   } else {
@@ -779,7 +795,7 @@ function newContributor($wish, $profile, $amount) {
   $profileid = $attrs["id"];
 
    if ($amount < 0) {
-    exit("Contributor " . $profileid . " adds negative amount " . $amount);
+     exit("Contributor " . out($profileid) . " adds negative amount " . out($amount));
   }
 
   $present = getContributorByProfile($wish, $profileid);
@@ -805,7 +821,7 @@ function setAmount($contributor, $amount) {
   $attrs = $contributor->attributes();
 
   if ($amount < 0) {
-    exit("Contributor " . $attrs["id"] . " adds negative amount " . $amount);
+    exit("Contributor " . out($attrs["id"]) . " adds negative amount " . out($amount));
   }
 
   $attrs["amount"] = $amount;

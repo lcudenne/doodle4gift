@@ -28,15 +28,15 @@ function displayProfile($doodle4gift, $login, $gifts, $profile) {
 
   $gifts = getGiftsByProfile ($doodle4gift, $gifts, $profile);
 
-  print " <div class=\"element\" id=\"" . $attrs["id"] .
+  print " <div class=\"element\" id=\"" . out($attrs["id"]) .
     "\" >";
 
   if (!empty($gifts)) {
     print "<div class=\"filetaghover\">";
   }
 
-  print "<a href=\"" . $SCRIPTNAME . "?action=showprofile&amp;profile=" . $attrs["id"] . "\">
-         <img class=\"elementimg\" src=\"img/avatar_" . $attrs["avatar"] . ".png\" />
+  print "<a href=\"" . $SCRIPTNAME . "?action=showprofile&amp;profile=" . out($attrs["id"]) . "\">
+         <img class=\"elementimg\" src=\"img/avatar_" . out($attrs["avatar"]) . ".png\" />
          </a>";
 
   if (!empty($gifts)) {
@@ -53,7 +53,7 @@ function displayProfile($doodle4gift, $login, $gifts, $profile) {
   }
 
   print "<div class=\"elementname\">"
-    . stripslashes($attrs["name"]) . "</div></div>\n";
+    . out($attrs["name"]) . "</div></div>\n";
 
 }
 
@@ -62,10 +62,10 @@ function displaySmallProfile($profile) {
   global $SCRIPTNAME;
 
   $attrs = $profile->attributes();
-  print " <div class=\"smallelement\" id=\"" . $attrs["id"] .
-    "\" ><a href=\"" . $SCRIPTNAME . "?action=showprofile&amp;profile=" . $attrs["id"] .
-    "\"><img class=\"smallelementimg\" src=\"img/avatar_" . $attrs["avatar"] . ".png\" /><br /><div class=\"elementname\">"
-    . stripslashes($attrs["name"]) . "</div></a></div>\n";
+  print " <div class=\"smallelement\" id=\"" . out($attrs["id"]) .
+    "\" ><a href=\"" . $SCRIPTNAME . "?action=showprofile&amp;profile=" . out($attrs["id"]) .
+    "\"><img class=\"smallelementimg\" src=\"img/avatar_" . out($attrs["avatar"]) . ".png\" /><br /><div class=\"elementname\">"
+    . out($attrs["name"]) . "</div></a></div>\n";
 
 }
 
@@ -76,11 +76,11 @@ function displaySmallProfileWish($profile, $wish) {
   $attrs = $profile->attributes();
   $attrsw = $wish->attributes();
 
-  print " <div class=\"smallelement\" id=\"" . $attrs["id"] .
-    "\" ><a href=\"" . $SCRIPTNAME . "?action=showprofile&amp;profile=" . $attrs["id"] .
-    "#" . $attrsw["id"] . "\"><img class=\"smallelementimg\" src=\"img/avatar_" .
-    $attrs["avatar"] . ".png\" /><br /><div class=\"elementname\">" .
-    stripslashes($attrs["name"]) . "</div></a></div>\n";
+  print " <div class=\"smallelement\" id=\"" . out($attrs["id"]) .
+    "\" ><a href=\"" . $SCRIPTNAME . "?action=showprofile&amp;profile=" . out($attrs["id"]) .
+    "#" . out($attrsw["id"]) . "\"><img class=\"smallelementimg\" src=\"img/avatar_" .
+    out($attrs["avatar"]) . ".png\" /><br /><div class=\"elementname\">" .
+    out($attrs["name"]) . "</div></a></div>\n";
 
 }
 
@@ -101,7 +101,7 @@ function displayProfiles($doodle4gift, $login, $profiles, $gifts) {
 function displayWish($wish) {
 
   $attrs = $wish->attributes();
-  print "<div class=\"element\" id=\"" . $attrs["id"] . "\" ><img class=\"elementimg\" src=\"img/gift.png\" /><br /><div class=\"elementname\">" . $attrs["gift"] . "</div></div>\n";
+  print "<div class=\"element\" id=\"" . out($attrs["id"]) . "\" ><img class=\"elementimg\" src=\"img/gift.png\" /><br /><div class=\"elementname\">" . out($attrs["gift"]) . "</div></div>\n";
 
 }
 
@@ -122,7 +122,7 @@ function displayWishlist($wishlist) {
 function displayContributor($contributor) {
 
   $attrs = $contributor->attributes();
-  print "<div class=\"contributor\" id=\"" . $attrs["id"] . "\" >[CONTRIBUTOR] " . $attrs["profile"] . " " . $attrs["amount"] . "</div>\n";
+  print "<div class=\"contributor\" id=\"" . out($attrs["id"]) . "\" >[CONTRIBUTOR] " . out($attrs["profile"]) . " " . out($attrs["amount"]) . "</div>\n";
 
 }
 
@@ -144,17 +144,17 @@ function displayGift($profiles, $gift) {
   $image = "img/gift.png";
 
   $attrs = $gift->attributes();
-  print "<div class=\"element\" id=\"" . $attrs["id"] . "\" >
+  print "<div class=\"element\" id=\"" . out($attrs["id"]) . "\" >
          <div class=\"filetaghover\">";
 
   if (!empty($attrs["link"])) {
-    print "<a href=\"" . $attrs["link"] . "\" target=\"_blank\">";
+    print "<a href=\"" . outurl($attrs["link"]) . "\" target=\"_blank\">";
   }
   if (!empty($attrs["image"])) {
     $image = $attrs["image"];
   }
 
-  print "<img class=\"elementimg\" src=\"" . $image . "\" />";
+  print "<img class=\"elementimg\" src=\"" . outurl($image) . "\" />";
 
   if ($attrs["link"]) {
     print "</a>";
@@ -173,7 +173,7 @@ function displayGift($profiles, $gift) {
 
   print "</div>
          <div class=\"elementname\">" .
-    stripslashes($attrs["name"]) . "</div>";
+    out($attrs["name"]) . "</div>";
 
   print "</div>\n";
 
@@ -185,24 +185,24 @@ function displaySmallGift($gift) {
 
   $attrs = $gift->attributes();
 
-  print " <div class=\"smallelement\" id=\"" . $attrs["id"] .
+  print " <div class=\"smallelement\" id=\"" . out($attrs["id"]) .
     "\" >";
 
   if (!empty($attrs["link"])) {
-    print "<a href=\"" . $attrs["link"] . "\" target=\"_blank\">";
+    print "<a href=\"" . outurl($attrs["link"]) . "\" target=\"_blank\">";
   }
   if (!empty($attrs["image"])) {
     $image = $attrs["image"];
   }
 
-  print "<img class=\"smallelementimg\" src=\"" . $image . "\" />";
+  print "<img class=\"smallelementimg\" src=\"" . outurl($image) . "\" />";
 
   if ($attrs["link"]) {
     print "</a>";
   }
 
   print "<br /><div class=\"elementname\">"
-    . stripslashes($attrs["name"]) . "</div></div>\n";
+    . out($attrs["name"]) . "</div></div>\n";
 
 }
 
@@ -229,8 +229,8 @@ function displaySelectGifts($doodle4gift, $gifts) {
   foreach($gifts->children() as $gift) {
     if (!getGiftSurprise($doodle4gift, $gift)) {
       $attrs = $gift->attributes();
-      print " <option value=\"" . $attrs["id"] . "\">" . stripslashes($attrs["name"])
-	. " (" . $S[30] . " " . $attrs["price"] . ")</option>\n";
+      print " <option value=\"" . out($attrs["id"]) . "\">" . out($attrs["name"])
+	. " (" . $S[30] . " " . out($attrs["price"]) . ")</option>\n";
     }
   }
   print "</select>\n";
@@ -283,9 +283,9 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 
     if (empty($wishchildren) && empty($contlist)) {
       print "<br />";
-      print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . $wishattrs["id"] . "\">\n";
+      print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . out($wishattrs["id"]) . "\">\n";
       print " <input type=\"hidden\" name=\"_d4g_action\" value=\"deleteprofile\" />\n
-              <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
+              <input type=\"hidden\" name=\"_d4g_profile\" value=\"" . out($profileattrs["id"]) . "\" />\n
               <input class=\"inputclass\" type=\"submit\" value=\"" . $S[33] . "\" />\n";
       print "</form>\n";
     }
@@ -306,7 +306,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
       $gift = getGift($gifts, $wishattrs["gift"]);
 
       if ($gift == NULL) {
-	exit("Cannot retrieve Gift " . $wishattrs["gift"]);
+	exit("Cannot retrieve Gift " . out($wishattrs["gift"]));
       }
 
       $surprise = getGiftSurprise($doodle4gift, $gift);
@@ -326,8 +326,8 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
                      ($editwishattrs["id"] == $wishattrs["id"]) &&
                      (($profile == $login) || ($creator == $login) || ($leader == $login)));
 
-      print "<a name=\"#" . $wishattrs["id"] . "\"></a>
-             <div class=\"wish\" id=\"" . $wishattrs["id"] . "\">\n
+      print "<a name=\"#" . out($wishattrs["id"]) . "\"></a>
+             <div class=\"wish\" id=\"" .  out($wishattrs["id"]) . "\">\n
              <table><tr><td class=\"leftdescription\">\n";
 
       displayGift($profiles, $gift);
@@ -337,7 +337,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
       print "<div class=\"wishdescription\">\n";
 
       if ($doeditwish) {
-        print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . $wishattrs["id"] . "\">\n";
+        print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" .  out($wishattrs["id"]) . "\">\n";
       }
 
       print "<table class=\"tabledescription\"><tr><td class=\"leftdescription\">";
@@ -351,24 +351,24 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 
           print "
               <input type=\"hidden\" name=\"_d4g_action\" value=\"modifywish\" />\n
-              <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
-              <input type=\"hidden\" name=\"_d4g_wish\" value=\"".$wishattrs["id"]."\" />\n
+              <input type=\"hidden\" name=\"_d4g_profile\" value=\"".out($profileattrs["id"])."\" />\n
+              <input type=\"hidden\" name=\"_d4g_wish\" value=\"". out($wishattrs["id"])."\" />\n
               <input class=\"inputclass\" type=\"submit\" value=\"" . $S[31] . "\" />\n";
 
         } else {
 
           print "<table><tr><td>";
-          print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . $wishattrs["id"] . "\">\n
+          print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" .  out($wishattrs["id"]) . "\">\n
               <input type=\"hidden\" name=\"_d4g_action\" value=\"editwish\" />\n
-              <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
-              <input type=\"hidden\" name=\"_d4g_wish\" value=\"".$wishattrs["id"]."\" />\n
+              <input type=\"hidden\" name=\"_d4g_profile\" value=\"". out($profileattrs["id"])."\" />\n
+              <input type=\"hidden\" name=\"_d4g_wish\" value=\"". out($wishattrs["id"])."\" />\n
               <input class=\"inputclass\" type=\"submit\" value=\"" . $S[32] . "\" />\n
              </form>\n";
           print "</td><td>";
           print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "\">\n
               <input type=\"hidden\" name=\"_d4g_action\" value=\"deletewish\" />\n
-              <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
-              <input type=\"hidden\" name=\"_d4g_wish\" value=\"".$wishattrs["id"]."\" />\n
+              <input type=\"hidden\" name=\"_d4g_profile\" value=\"". out($profileattrs["id"])."\" />\n
+              <input type=\"hidden\" name=\"_d4g_wish\" value=\"". out($wishattrs["id"])."\" />\n
               <input class=\"inputclass\" type=\"submit\" value=\"" . $S[33] . "\" />\n
              </form>\n";
           print "</td></tr></table>";
@@ -398,7 +398,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
         if ($percentpaid > 100) {
           $percentpaid = 100;
         }
-	print "<div class=\"percentbar\" style=\"width:200px\" title=\"" . $S[30] . " ". $giftattrs["price"] . "\">\n
+	print "<div class=\"percentbar\" style=\"width:200px\" title=\"" . $S[30] . " ".  out($giftattrs["price"]) . "\">\n
                 <div class=\"percentbaramount\" style=\"width:" . ($percent * 2) . "px\" title=\"" . $S[34] . " ". $sum . "\">\n
                  <div class=\"percentbarpaid\" style=\"width:" . ($percentpaid * 2) . "px\" title=\"" . $S[35] . " ". $paid . "\">";
 	
@@ -407,7 +407,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 	  if ($percentprice > 100) {
 	    $percentprice = 100;
 	  }
-	  print "<div class=\"percentbarprice\" style=\"width:" . ($percentprice * 2) . "px\" title=\"" . $S[30] . " ". $price . "\"></div>\n";
+	  print "<div class=\"percentbarprice\" style=\"width:" . ($percentprice * 2) . "px\" title=\"" . $S[30] . " ".  out($price) . "\"></div>\n";
 	}
 
 	print "  </div>\n
@@ -424,10 +424,10 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
         echo "
            <tr><td class=\"leftdescription\">
           " . $S[7] . " (*)</td><td class=\"rightdescription\">
-          <input class=\"fieldclass\" type=\"text\" name=\"_d4g_giftname\" size=\"15\" required value=\"" . stripslashes($giftattrs["name"]) . "\" />
+          <input class=\"fieldclass\" type=\"text\" name=\"_d4g_giftname\" size=\"15\" required value=\"" . out($giftattrs["name"]) . "\" />
           </td></tr><tr><td class=\"leftdescription\">\n
           " . $S[30] . " (*)</td><td class=\"rightdescription\">
-          <input type=\"number\" name=\"_d4g_giftprice\" size=\"3\" required value=\"" . $giftattrs["price"] . "\" /> ";
+          <input type=\"number\" name=\"_d4g_giftprice\" size=\"3\" required value=\"" .  out($giftattrs["price"]) . "\" /> ";
 
 	if ($profile != $login) {
 	    echo $S[47] . " <input type=\"checkbox\" name=\"_d4g_giftsurprise\" ";
@@ -439,13 +439,13 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 
 	echo "</td></tr><tr><td class=\"leftdescription\">\n
           " . $S[37] . "</td><td class=\"rightdescription\">
-          <textarea class=\"fieldclass\" name=\"_d4g_giftdesc\" >" . stripslashes($gift[0]) . "</textarea>
+          <textarea class=\"fieldclass\" name=\"_d4g_giftdesc\" >" . out($gift[0]) . "</textarea>
           </td></tr><tr><td class=\"leftdescription\">\n
           " . $S[38] . "</td><td class=\"rightdescription\">
-          <input class=\"fieldclass\" type=\"url\" name=\"_d4g_giftlink\" value=\"" . $giftattrs["link"] . "\" />
+          <input class=\"fieldclass\" type=\"url\" name=\"_d4g_giftlink\" value=\"" .  outurl($giftattrs["link"]) . "\" />
           </td></tr><tr><td class=\"leftdescription\">\n
           " . $S[39] . "</td><td class=\"rightdescription\">
-          <input class=\"fieldclass\" type=\"url\" name=\"_d4g_giftimage\" value=\"" . $giftattrs["image"] . "\" />
+          <input class=\"fieldclass\" type=\"url\" name=\"_d4g_giftimage\" value=\"" .  outurl($giftattrs["image"]) . "\" />
           </td></tr><tr>";
 
 
@@ -453,17 +453,17 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 
         print "<tr><td class=\"leftdescription\">" . $S[7] . "</td><td class=\"rightdescription\">";
         if (!empty($giftattrs["link"])) {
-          print "<a href=\"" . $giftattrs["link"] . "\" >" . stripslashes($giftattrs["name"]) . "</a>";
+          print "<a href=\"" . $giftattrs["link"] . "\" >" . out($giftattrs["name"]) . "</a>";
         } else {
-          print stripslashes($giftattrs["name"]);
+          print out($giftattrs["name"]);
         }
         print "</td></tr>";
-        print "<tr><td class=\"leftdescription\">" . $S[30] . "</td><td class=\"rightdescription\">" . $giftattrs["price"];
+        print "<tr><td class=\"leftdescription\">" . $S[30] . "</td><td class=\"rightdescription\">" .  out($giftattrs["price"]);
 	if ($surprise) {
 	  print " <div class=\"surprise\">" . $S[47] . "</div><img class=\"verysmallelementimg\" src=\"img/gift.png\" />";
 	}
 	print "</td></tr>";
-        print "<tr><td class=\"leftdescription\">" . $S[37] . "</td><td class=\"rightdescription\">" . stripslashes($gift[0]) . "</td></tr>";
+        print "<tr><td class=\"leftdescription\">" . $S[37] . "</td><td class=\"rightdescription\">" . out($gift[0]) . "</td></tr>";
 
 
       } /* doeditwish */
@@ -519,18 +519,18 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
           displaySmallProfile($leader);
           print "<br />\n";
           if ($leader == $login) {
-            print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . $wishattrs["id"] . "\">\n
+            print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" .  out($wishattrs["id"]) . "\">\n
               <input type=\"hidden\" name=\"_d4g_action\" value=\"removelead\" />\n
-              <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
-              <input type=\"hidden\" name=\"_d4g_wish\" value=\"".$wishattrs["id"]."\" />\n
+              <input type=\"hidden\" name=\"_d4g_profile\" value=\"". out($profileattrs["id"])."\" />\n
+              <input type=\"hidden\" name=\"_d4g_wish\" value=\"". out($wishattrs["id"])."\" />\n
               <input class=\"inputclass\" type=\"submit\" value=\"" . $S[36] . "\" />\n
              </form>\n";
           }
         } else {
-          print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . $wishattrs["id"] . "\">\n
+          print "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" .  out($wishattrs["id"]) . "\">\n
               <input type=\"hidden\" name=\"_d4g_action\" value=\"takelead\" />\n
-              <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
-              <input type=\"hidden\" name=\"_d4g_wish\" value=\"".$wishattrs["id"]."\" />\n
+              <input type=\"hidden\" name=\"_d4g_profile\" value=\"". out($profileattrs["id"])."\" />\n
+              <input type=\"hidden\" name=\"_d4g_wish\" value=\"". out($wishattrs["id"])."\" />\n
               <input class=\"inputclass\" type=\"submit\" value=\"" . $S[40] . "\" />\n
              </form>\n";
         }
@@ -548,13 +548,13 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
           $contributorattrs = $mycont->attributes();
 
           echo "<div class=\"amount\"> 
-	      <form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . $wishattrs["id"] . "\">\n
+	      <form method=\"POST\" action=\"" . $SCRIPTNAME . "#" .  out($wishattrs["id"]) . "\">\n
               <input type=\"hidden\" name=\"_d4g_action\" value=\"setamount\" />\n
-              <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
-              <input type=\"hidden\" name=\"_d4g_wish\" value=\"".$wishattrs["id"]."\" />\n
-              <input type=\"hidden\" name=\"_d4g_contributor\" value=\"".$contributorattrs["id"]."\" />\n
+              <input type=\"hidden\" name=\"_d4g_profile\" value=\"". out($profileattrs["id"])."\" />\n
+              <input type=\"hidden\" name=\"_d4g_wish\" value=\"". out($wishattrs["id"])."\" />\n
+              <input type=\"hidden\" name=\"_d4g_contributor\" value=\"". out($contributorattrs["id"])."\" />\n
              <input class=\"inputclass\" type=\"number\" name=\"_d4g_amount\" placeholder=\""
-            . $contributorattrs["amount"] . "\" required />
+            .  out($contributorattrs["amount"]) . "\" required />
              <input class=\"inputclass\" type=\"submit\" value=\"" . $S[31] . "\" />\n
              </form>\n";
 
@@ -564,21 +564,21 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 
           } else {
 
-            echo "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . $wishattrs["id"] . "\">\n
+            echo "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" .  out($wishattrs["id"]) . "\">\n
                   <input type=\"hidden\" name=\"_d4g_action\" value=\"paycontribution\" />\n
-                  <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
-                  <input type=\"hidden\" name=\"_d4g_wish\" value=\"".$wishattrs["id"]."\" />\n
-                  <input type=\"hidden\" name=\"_d4g_contributor\" value=\"".$contributorattrs["id"]."\" />\n
+                  <input type=\"hidden\" name=\"_d4g_profile\" value=\"". out($profileattrs["id"])."\" />\n
+                  <input type=\"hidden\" name=\"_d4g_wish\" value=\"". out($wishattrs["id"])."\" />\n
+                  <input type=\"hidden\" name=\"_d4g_contributor\" value=\"". out($contributorattrs["id"])."\" />\n
                   <input class=\"inputclass\" type=\"submit\" value=\"" . $S[35] . "\" />\n
                   </form>\n";
 
           }
 
-          echo "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . $wishattrs["id"] . "\">\n
+          echo "<form method=\"POST\" action=\"" . $SCRIPTNAME . "#" .  out($wishattrs["id"]) . "\">\n
              <input type=\"hidden\" name=\"_d4g_action\" value=\"deletecontributor\" />\n
-             <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
-             <input type=\"hidden\" name=\"_d4g_wish\" value=\"".$wishattrs["id"]."\" />\n
-             <input type=\"hidden\" name=\"_d4g_contributor\" value=\"".$contributorattrs["id"]."\" />\n
+             <input type=\"hidden\" name=\"_d4g_profile\" value=\"". out($profileattrs["id"])."\" />\n
+             <input type=\"hidden\" name=\"_d4g_wish\" value=\"". out($wishattrs["id"])."\" />\n
+             <input type=\"hidden\" name=\"_d4g_contributor\" value=\"". out($contributorattrs["id"])."\" />\n
              <input class=\"inputclass\" type=\"submit\" value=\"" . $S[33] . "\" />\n
              </form>\n
 	     </div>\n";
@@ -591,11 +591,11 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
 	  }
 
 	  echo "<div class=\"amount\">
-	    <form method=\"POST\" action=\"" . $SCRIPTNAME . "#" . $wishattrs["id"] . "\">\n
+	    <form method=\"POST\" action=\"" . $SCRIPTNAME . "#" .  out($wishattrs["id"]) . "\">\n
              <input type=\"hidden\" name=\"_d4g_action\" value=\"addcontributor\" />\n
-             <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
-             <input type=\"hidden\" name=\"_d4g_wish\" value=\"".$wishattrs["id"]."\" />\n
-             <input class=\"inputclass\" type=\"number\" name=\"_d4g_amount\" placeholder=\"". $suggestedcont
+             <input type=\"hidden\" name=\"_d4g_profile\" value=\"". out($profileattrs["id"])."\" />\n
+             <input type=\"hidden\" name=\"_d4g_wish\" value=\"". out($wishattrs["id"])."\" />\n
+             <input class=\"inputclass\" type=\"number\" name=\"_d4g_amount\" placeholder=\"".  $suggestedcont
 	    . "\" required /><input class=\"inputclass\" type=\"submit\" value=\"" . $S[41] . "\" />\n
             </form>\n</div>";
 
@@ -624,7 +624,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
     echo "<div class=\"wishdescription\">\n
          <form method=\"POST\" action=\"" . $SCRIPTNAME . "\">\n
             <input type=\"hidden\" name=\"_d4g_action\" value=\"addwish\" />\n
-            <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
+            <input type=\"hidden\" name=\"_d4g_profile\" value=\"". out($profileattrs["id"])."\" />\n
           <table class=\"tabledescription\">
            <tr><td class=\"leftdescription\">
           " . $S[7] . " (*)</td><td class=\"rightdescription\"><input class=\"fieldclass\" type=\"text\" name=\"_d4g_giftname\" placeholder=\"" . $S[8] . "\" size=\"15\" required /></td></tr><tr><td class=\"leftdescription\">\n
@@ -649,7 +649,7 @@ function displayProfileWishlistCore($doodle4gift, $login, $profile, $profiles, $
       echo "<div class=\"wishdescription\">\n
           <form method=\"POST\" action=\"" . $SCRIPTNAME . "\">\n
             <input type=\"hidden\" name=\"_d4g_action\" value=\"addexistingwish\" />\n
-            <input type=\"hidden\" name=\"_d4g_profile\" value=\"".$profileattrs["id"]."\" />\n
+            <input type=\"hidden\" name=\"_d4g_profile\" value=\"". out($profileattrs["id"])."\" />\n
           <table class=\"tabledescription\"><tr><td class=\"leftdescription\">
           " . $S[43] . "</td><td class=\"rightdescription\">\n";
 
